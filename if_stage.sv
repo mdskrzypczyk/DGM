@@ -3,26 +3,40 @@ import lc3b_types::*;
 module if_stage
 (
 	input clk,
-	input br_add,
-	input wb_data,
-	input pcmux_sel,
+	input lc3b_word br_add,
+	input lc3b_word wb_data,
+	input[1:0] pcmux_sel,
 	
-	output ipacket
+	output lc3b_ipacket packet,
+	
+	// temporary output signals for memory module 
+	//output signal to memory 
+	output lc3b_word if_memaddr,	//address
+	output logic if_memread,	//read
+	output logic [1:0] if_mem_byte_enable, //byte read 
+	//no write and write data 
+
+	
+	//input signal from memory 
+	input if_mem_resp,	//mem response 
+	input lc3b_word if_mem_rdata	//read data 
+	
 );
 
 /*internal signals*/
-lc3b_word pcmux_out, pc_out, ic_out, plus2_out;
+lc3b_word pcmux_out, pc_out,  plus2_out;
 logic ic_mem_resp, load_pc;
+ 
 
 /* PC PLUS 2 UNIT */
 plus2 plus2(
-	.in(pc),
+	.in(pc_out),
 	
 	.out(plus2_out)
 );
 
 /* LOAD PC MUX */
-mux4 pcmux
+mux4 #(.width(16)) pcmux  
 (
 	.sel(pcmux_sel),
 	.a(plus2_out),
@@ -33,20 +47,10 @@ mux4 pcmux
 	.f(pcmux_out)
 );
 
-/* Instruction Memory Implementation */
-instruction_cache instruction_cache
-(
-	.clk(clk),
-	.mem_address(pc_out),
-	.mem_read(1),
-	.mem_byte_enable(2'b11),
-	
-	.mem_rdata(ic_out),
-	.mem_resp(ic_mem_resp)	
-);
+
 
 /* PC Register */
-register pc
+register pc_module
 (
 	.clk(clk),
 	.load(load_pc),
@@ -58,16 +62,24 @@ register pc
 /* Ipacket Generator */
 ipacket_creator ipacket_creator 
 (
-	.inst(ic_out),
-	.ipacket(ipacket)
+	.inst(if_mem_rdata),
+	.pc(pc_out),
+	
+	.ipacket(packet)
 );
 
 /* Load Logic for PC */
 pc_load_logic pc_load_logic
 (
+	.in(1'b0),
 	.load_pc(load_pc)
 );
 
+/* Assign memory signals */
+ assign if_memaddr = pc_out;
+ assign if_memread = 1'b1;
+ assign if_mem_byte_enable = 2'b11;
+ assign ic_mem_resp = if_mem_resp;
 
 
 

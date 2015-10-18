@@ -1,9 +1,9 @@
-import lc3b_types::*;
+
 
 module pc_load_logic
 (
 	input in,
-	output load_pc
+	output logic load_pc
 );
 
 always_comb

@@ -7,13 +7,14 @@ import lc3b_types::*;
  
  module SUPER_SEXT(
 	input lc3b_word in,	// The input signals that contains necessary bits 
-	input lc3b_opcode opcode, 	// The opcode of the specific operation to determine which signed extension bits to output 
+	input [3:0] opcode, 	// The opcode of the specific operation to determine which signed extension bits to output 
 	
 	output lc3b_word out
  );
  
 always_comb
-	begin 
+	begin  
+		out = 16'b0;
 		case(opcode)
 			//ADD imm5
 			4'b0001:
@@ -54,6 +55,7 @@ always_comb
 			//TRAP vect8
 			4'b1111:
 				out = $signed({in[7:0], 1'b0}); //SEXT(PCoffset7) << 1
+			default : ;
 		endcase 
 	
 	end  

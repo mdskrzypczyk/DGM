@@ -21,9 +21,9 @@ logic meat_sr2mux_sel;
 initial 
 begin 
 	packet = 1'b0;
-	sr1 = 3'b0;
-	sr2 = 3'b0;
-	dr = 3'b0;
+	meat_sr1 = 3'b0;
+	meat_sr2 = 3'b0;
+	meat_dr = 3'b0;
 	instructions = 16'h0;
 	meat_sr2mux_sel = 1'b0;
 end 

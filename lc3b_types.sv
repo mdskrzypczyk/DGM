@@ -38,10 +38,10 @@ typedef enum bit [3:0] {
 } lc3b_opcode;
 
 typedef enum bit [3:0] {
+    alu_pass,
     alu_add,
     alu_and,
     alu_not,
-    alu_pass,
     alu_sll,
     alu_srl,
     alu_sra
@@ -49,7 +49,7 @@ typedef enum bit [3:0] {
 
 typedef struct packed {
 	/* Instruction */
-	lc3b_opcode opcode;
+	logic[3:0] opcode;
 	lc3b_word pc;
 	lc3b_word inst;
 	lc3b_reg dr_sr;
@@ -61,6 +61,7 @@ typedef struct packed {
 	
 	/* ID */
 	logic sr2_mux_sel;
+	logic drmux_sel;
 	
 	/* EXE*/
 	lc3b_aluop aluop;
@@ -73,12 +74,13 @@ typedef struct packed {
 	logic mem_write;
 	logic mem_read;
 	logic byte_op;
+	logic datamux_sel;
 	
 	/* WB */
 	logic [1:0] pcmux_sel;
 	logic regfile_mux_sel;
 	logic load_cc;
-	logic cc_mux_sel;
+	logic[1:0] cc_mux_sel;
 	logic load_regfile;
 } lc3b_ipacket;
 

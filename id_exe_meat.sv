@@ -16,7 +16,8 @@ module id_exe_meat
 );
 
 /* Internal registers */
-lc3b_word sr1_reg, sr2_reg, sext_reg, ipacket_reg;
+lc3b_word sr1_reg, sr2_reg, sext_reg;
+lc3b_ipacket ipacket_reg;
 
 /* Initialize to zero */
 initial
