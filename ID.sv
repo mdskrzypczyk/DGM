@@ -5,7 +5,7 @@ module ID(
 	input clk,
 	input lc3b_ipacket ipacket,
 	input lc3b_reg sr1, sr2, dr_meat, wbdr,
-	input lc3b_word wbpc, wbdata, instruction,
+	input lc3b_word wbpc, wbdata,
 	input sr2_mux_sel,
 	input drmux_sel,
 	input regfile_mux_sel,
@@ -60,8 +60,8 @@ regfile regfile_module
 /* Super S/ZEXT */
 SUPER_SEXT sext_module
 (
-	.in(instruction),
-	.opcode(instruction[15:12]),
+	.in(ipacket.inst),
+	.opcode(ipacket.inst[15:12]),
 	.out(sext_out)
 );
 

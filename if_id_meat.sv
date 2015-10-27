@@ -8,13 +8,11 @@ module if_id_meat
 	
 	output lc3b_ipacket ipacket_out,
 	output lc3b_reg sr1, sr2, dr,
-	output logic sr2mux_sel,
-	output lc3b_word instruction
+	output logic sr2mux_sel
 );
 
 lc3b_ipacket packet;
 lc3b_reg meat_sr1, meat_sr2, meat_dr; 
-lc3b_word instructions; 
 logic meat_sr2mux_sel;
 
 /* Initialize internal registers to zero */
@@ -24,7 +22,6 @@ begin
 	meat_sr1 = 3'b0;
 	meat_sr2 = 3'b0;
 	meat_dr = 3'b0;
-	instructions = 16'h0;
 	meat_sr2mux_sel = 1'b0;
 end 
 
@@ -37,7 +34,6 @@ begin
 		meat_sr1 = ipacket_in.sr1;
 		meat_sr2 = ipacket_in.sr2;
 		meat_dr = ipacket_in.dr_sr;
-		instructions = ipacket_in.inst;
 		meat_sr2mux_sel = ipacket_in.sr2_mux_sel;
 	end 
 end 
@@ -49,7 +45,6 @@ begin
 	sr1 = meat_sr1;
 	sr2 = meat_sr2;
 	dr = meat_dr;
-	instruction = instructions;
 	sr2mux_sel = meat_sr2mux_sel;
 end 
 

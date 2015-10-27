@@ -88,7 +88,6 @@ if_id_meat IF_ID(
 	.ipacket_in(if_ipacket),
 	
 	.ipacket_out(if_id_ipacket),
-	.instruction(id_instruction),
 	.sr1(sr1),
 	.sr2(sr2),
 	.dr(dr),
@@ -107,7 +106,6 @@ ID decode_module(
 	.wbpc(wbpc),
 	.wbdata(wbdata),
 	.sr2_mux_sel(sr2mux_sel),
-	.instruction(id_instruction),
 	.regfile_mux_sel(wb_regfile_mux_sel),
 	.load_regfile(wb_load_regfile),
 	
