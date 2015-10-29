@@ -6,6 +6,7 @@ module if_stage
 	input lc3b_word br_add,
 	input lc3b_word wb_data,
 	input[1:0] pcmux_sel,
+	input pc_stall,
 	
 	output lc3b_ipacket packet,
 	
@@ -53,7 +54,7 @@ mux4 #(.width(16)) pcmux
 register pc_module
 (
 	.clk(clk),
-	.load(load_pc),
+	.load(~pc_stall),
 	.in(pcmux_out),
 	
 	.out(pc_out)
@@ -69,6 +70,7 @@ ipacket_creator ipacket_creator
 );
 
 /* Load Logic for PC */
+//NO longer needed? may be for branch hazards
 pc_load_logic pc_load_logic
 (
 	.in(1'b0),

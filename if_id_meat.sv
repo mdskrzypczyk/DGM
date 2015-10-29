@@ -36,16 +36,29 @@ begin
 		meat_dr = ipacket_in.dr_sr;
 		meat_sr2mux_sel = ipacket_in.sr2_mux_sel;
 	end 
+	
 end 
 
 /* Output values to next stage */
 always_comb
 begin 
-	ipacket_out = packet;
-	sr1 = meat_sr1;
-	sr2 = meat_sr2;
-	dr = meat_dr;
-	sr2mux_sel = meat_sr2mux_sel;
+	if(~stall)
+	begin
+		ipacket_out = packet;
+		sr1 = meat_sr1;
+		sr2 = meat_sr2;
+		dr = meat_dr;
+		sr2mux_sel = meat_sr2mux_sel;
+	end
+	
+	else
+	begin	
+		ipacket_out = 1'b0;
+		sr1 = 3'b0;
+		sr2 = 3'b0;
+		dr = 3'b0;
+		sr2mux_sel = 1'b0;
+	end
 end 
 
 endmodule : if_id_meat

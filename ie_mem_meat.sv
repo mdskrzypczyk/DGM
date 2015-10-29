@@ -63,11 +63,24 @@ end
 /* Output data to MEM Stage */
 always_comb
 begin	
-	out_ipacket = ipacket;
-	meat_alu_out = alu_reg;
-	meat_addrgen_out = addrgen_reg;
-	hold = hold_reg;
-	sr_store_out = sr_store;
+	if(~stall)
+	begin
+		out_ipacket = ipacket;
+		meat_alu_out = alu_reg;
+		meat_addrgen_out = addrgen_reg;
+		hold = hold_reg;
+		sr_store_out = sr_store;
+	end
+	
+	else
+	begin
+		out_ipacket = 1'b0;
+		meat_alu_out = 16'b0;
+		meat_addrgen_out = 16'h0;
+		hold = 1'b0;    //TODO MATT what do you want from me?
+		sr_store_out = 16'b0;
+	end
 end
+
 
 endmodule : ie_mem_meat
