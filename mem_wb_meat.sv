@@ -4,6 +4,7 @@ module mem_wb_meat(
 	/* meat input */
 	input lc3b_ipacket ipacket,
 	input lc3b_word alu_in, mem_data, br_address,
+	input flush,
 	
 	/* control signal */
 	input clk,
@@ -30,7 +31,14 @@ end
 /* Store data from MEM Stage */
 always_ff @(posedge clk)
 begin 
-	if(~stall)  //case not stalling 
+	if(flush)
+	begin
+		address = 16'h0;
+		memdata = 16'h0;
+		aludata = 16'h0;
+		packet = 1'b0;
+	end
+	else if(~stall)  //case not stalling 
 	begin 
 		address = br_address;
 		memdata = mem_data;
@@ -42,10 +50,21 @@ end
 /* Output to WB Stage */
 always_comb
 begin 
-	ipacket_out = packet;
-	mem_data_out = memdata;
-	br_address_out = address;
-	alu_out = aludata;
+	if(~stall)
+	begin
+		ipacket_out = packet;
+		mem_data_out = memdata;
+		br_address_out = address;
+		alu_out = aludata;
+	end
+	
+	else
+	begin
+		ipacket_out = 1'b0;
+		mem_data_out = 16'b0;
+		br_address_out = 16'b0;
+		alu_out = 16'b0;
+	end
 end 
 
 endmodule : mem_wb_meat

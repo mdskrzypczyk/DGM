@@ -6,6 +6,7 @@ module if_stage
 	input lc3b_word br_add,
 	input lc3b_word wb_data,
 	input[1:0] pcmux_sel,
+	input pc_stall,
 	
 	output lc3b_ipacket packet,
 	
@@ -25,7 +26,7 @@ module if_stage
 
 /*internal signals*/
 lc3b_word pcmux_out, pc_out,  plus2_out;
-logic ic_mem_resp, load_pc;
+logic load_pc;
  
 
 /* PC PLUS 2 UNIT */
@@ -53,7 +54,7 @@ mux4 #(.width(16)) pcmux
 register pc_module
 (
 	.clk(clk),
-	.load(load_pc),
+	.load(~pc_stall),
 	.in(pcmux_out),
 	
 	.out(pc_out)
@@ -79,8 +80,5 @@ pc_load_logic pc_load_logic
  assign if_memaddr = pc_out;
  assign if_memread = 1'b1;
  assign if_mem_byte_enable = 2'b11;
- assign ic_mem_resp = if_mem_resp;
-
-
 
 endmodule : if_stage
