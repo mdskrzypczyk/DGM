@@ -209,8 +209,16 @@ WB write_back(
 /* Hazard Detection*/
 hazard_detection hazard_detection_module
 (
+	/* If signals */
 	.if_mem_resp(if_mem_resp),
+	.if_memread(if_memread),
+	
+	/* Mem signals */
 	.mem_mem_resp(mem_mem_resp),
+	.mem_memread(mem_memread),
+	.mem_memwrite(mem_memwrite),	
+	
+	/*Sti Ldi*/
 	.sti_ldi_sig(1'b0),
 	
 	.pc_stall(pc_stall),
