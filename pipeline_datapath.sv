@@ -24,7 +24,7 @@ module pipeline_datapath(
 
 
 /* Internal signals */
-logic pc_stall, if_id_stall, id_ie_stall, ie_mem_stall, mem_wb_stall;
+logic pc_stall, if_id_stall, id_ie_stall, ie_mem_stall, mem_wb_stall, flush;
 lc3b_ipacket if_ipacket, if_id_ipacket, id_ie_ipacket, ie_mem_ipacket, mem_wb_ipacket;
 
 /* IF signals */
@@ -44,7 +44,7 @@ lc3b_word ie_sr_store;
 /* MEM signals */
 lc3b_word mem_alu_in, mem_addrgen_in;
 lc3b_word mem_br_addr_out, mem_data_out,temp_out;
-logic load_addr, mem_hold;
+logic load_addr, mem_hold, mem_stage_resp;
 lc3b_word mem_sr_store;
 
 /* WB signals */
@@ -82,6 +82,7 @@ if_stage if_module(
 if_id_meat IF_ID(
 	.clk(clk),
 	.stall(if_id_stall),
+	.flush(flush),
 	.ipacket_in(if_ipacket),
 	
 	.ipacket_out(if_id_ipacket),
@@ -115,6 +116,7 @@ ID decode_module(
 id_exe_meat ID_EXE(
 	.clk(clk),
 	.stall(id_ie_stall),
+	.flush(flush),
 	.ipacket_in(if_id_ipacket),
 	.sr1_in(id_sr1_out),
 	.sr2_in(id_sr2_out),
@@ -143,11 +145,13 @@ ie_mem_meat IE_MEM(
 	.clk(clk),
 	.load_addr(1'b0),		//FIXo
 	.stall(ie_mem_stall),
+	.flush(flush),
 	.in_ipacket(id_ie_ipacket),
 	.ie_alu_res(ie_alu_out),
 	.ie_addrgen_res(ie_addrgen_out),
 	.meat_mem_rdata(mem_mem_rdata),
 	.sr_store_in(ie_sr_store),
+	.dmem_resp(mem_stage_resp),
 	
 	.sr_store_out(mem_sr_store),
 	.meat_alu_out(mem_alu_in),
@@ -165,18 +169,20 @@ mem_stage MEM(
 	.mem_resp(mem_mem_resp),
 	.sr_store(mem_sr_store),
 	
+	.dmem_resp(mem_stage_resp),
 	.mem_address(mem_memaddr),
 	.mem_wdata(mem_mem_wdata),
 	.mem_data_out(mem_data_out),
 	.mem_read(mem_memread),
 	.mem_write(mem_memwrite),
-	.mem_byte_enable()			//Connect to pipeline mem_byte_enable
+	.mem_byte_enable(mem_mem_byte_enable)			//Connect to pipeline mem_byte_enable
 );
 
 //MEM/WB MEAT
 mem_wb_meat MEM_WB(
 	.clk(clk),
 	.stall(mem_wb_stall),
+	.flush(flush),
 	.ipacket(ie_mem_ipacket),
 	.alu_in(mem_alu_in),
 	.mem_data(mem_data_out),
@@ -191,6 +197,7 @@ mem_wb_meat MEM_WB(
 //WB MODULE
 WB write_back(
 	.clk(clk),
+	.pip_flush(flush),
 	.mem_in(wbmem_data),
 	.alu_in(wbalu_data),
 	.br_addr(wbmem_addr),
@@ -206,7 +213,6 @@ WB write_back(
 	.load_regfile(wb_load_regfile)
 );
 
-/* Hazard Detection*/
 hazard_detection hazard_detection_module
 (
 	/* If signals */
@@ -227,6 +233,5 @@ hazard_detection hazard_detection_module
 	.ie_mem_stall(ie_mem_stall),
 	.mem_wb_stall(mem_wb_stall)
 );
-
 
 endmodule : pipeline_datapath

@@ -15,7 +15,8 @@ module WB(
 	output logic[1:0] pcmux_sel,
 	output lc3b_word wbdata,
 	output logic regfile_mux_sel,
-	output logic load_regfile
+	output logic load_regfile,
+	output logic pip_flush
 );
 
 /* internal signals */
@@ -34,7 +35,6 @@ gencc genccmodule(
 	.in(wbdata),
 	.out(gen_out)
 );
-
 
 mux4 #(.width(16)) cc_mux
 (
@@ -59,6 +59,12 @@ cccomp cccomp_module
 	.nzp(ipacket.nzp),
 	.cc(cc_out),
 	.branch_enable(br_taken)
+);
+
+flush_gen pipe_flush(
+	.opcode(ipacket.opcode),
+	.branch_enable(br_taken),
+	.flush(pip_flush)
 );
 
 pcmuxgen pcmuxselgen(

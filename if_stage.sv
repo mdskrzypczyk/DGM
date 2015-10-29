@@ -26,7 +26,7 @@ module if_stage
 
 /*internal signals*/
 lc3b_word pcmux_out, pc_out,  plus2_out;
-logic ic_mem_resp, load_pc;
+logic load_pc;
  
 
 /* PC PLUS 2 UNIT */
@@ -70,7 +70,6 @@ ipacket_creator ipacket_creator
 );
 
 /* Load Logic for PC */
-//NO longer needed? may be for branch hazards
 pc_load_logic pc_load_logic
 (
 	.in(1'b0),
@@ -81,8 +80,5 @@ pc_load_logic pc_load_logic
  assign if_memaddr = pc_out;
  assign if_memread = 1'b1;
  assign if_mem_byte_enable = 2'b11;
- assign ic_mem_resp = if_mem_resp;
-
-
 
 endmodule : if_stage

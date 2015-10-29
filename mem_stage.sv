@@ -8,13 +8,13 @@ module mem_stage(
 	input mem_resp,
 	input lc3b_word sr_store,
 
+	output logic dmem_resp,
 	output lc3b_word mem_address,
 	output lc3b_word mem_wdata,
 	output lc3b_word mem_data_out,	//memory data output
 	output logic mem_read,
 	output logic mem_write,
 	output logic[1:0] mem_byte_enable
-	
 );
 
 lc3b_word  addrmux_out;
@@ -24,6 +24,7 @@ assign mem_read = in_ipacket.mem_read;
 assign mem_write = in_ipacket.mem_write;
 assign mem_byte_enable = 2'b11;
 assign mem_address = addrmux_out;
+assign dmem_resp = mem_resp;
 
 
 /* Mux for Memory address */

@@ -1,5 +1,3 @@
-import lc3b_types::*;
-
 module pcmuxgen(
 	input [1:0] pcmux_sel,
 	input branch_enable,

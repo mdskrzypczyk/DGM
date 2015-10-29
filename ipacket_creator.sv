@@ -13,7 +13,7 @@ begin
 	/* Default Assignments */
 	/* Instruction */
 	ipacket.opcode = inst[15:12];
-	ipacket.pc = pc+2;
+	ipacket.pc = pc+16'h2;
 	ipacket.inst = inst;
 	ipacket.dr_sr = inst[11:9];
 	ipacket.sr1 = inst[8:6];
@@ -66,17 +66,20 @@ begin
 		
 		op_jmp : begin
 			ipacket.pcmux_sel = 2'b01;
-			ipacket.alumux_sel = 1'b1;
 		end
 		
 		op_jsr : begin
 			ipacket.load_regfile = 1'b1;
 			ipacket.dr_sr = 3'b111;
 			ipacket.regfile_mux_sel = 1'b1;
+			ipacket.cc_mux_sel = 2'b0;
+			ipacket.pcmux_sel = 2'b01;
+			
 			if(inst[11])
+			begin
 				ipacket.pcmux_sel = 2'b10;
-			else
-				ipacket.pcmux_sel = 2'b01;
+				ipacket.cc_mux_sel = 2'b10;
+			end
 		end
 		
 		op_ldb : begin
@@ -121,14 +124,11 @@ begin
 			ipacket.load_regfile = 1'b1;
 		end
 		
-		op_jmp : begin
-			ipacket.cc_mux_sel = 2'b01;
-		end
-		
 		op_shf : begin
 			ipacket.load_cc = 1'b1;
 			ipacket.load_regfile = 1'b1;
 			ipacket.cc_mux_sel = 2'b0;
+			ipacket.alumux_sel = 1'b1;
 			case(inst[5:4])
 				2'b00 :
 					ipacket.aluop = alu_sll;
