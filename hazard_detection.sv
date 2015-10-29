@@ -27,6 +27,7 @@ begin
 	if(if_mem_resp == 1'b0)
 	begin
 		pc_stall = 1'b1;
+		if_id_stall = 1'b1;
 	end
 	
 	/* Data Cache Miss */
