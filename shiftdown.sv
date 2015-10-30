@@ -15,7 +15,7 @@ begin
 		if (shift)
 			out = {8'h0, in[15:8]};
 		else
-			out = in;
+			out = {8'h0, in[7:0]};
 	end
 	else
 	begin

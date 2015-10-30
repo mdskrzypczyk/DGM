@@ -88,6 +88,7 @@ begin
 			ipacket.alumux_sel = 1'b1;
 			ipacket.load_regfile = 1'b1;
 			ipacket.cc_mux_sel = 2'b01;
+			ipacket.aluop = alu_add;
 			ipacket.mem_read = 1'b1;
 		end
 		
@@ -143,6 +144,7 @@ begin
 		
 		op_stb : begin
 			ipacket.byte_op = 1'b1;
+			ipacket.alumux_sel = 1'b1;
 			ipacket.aluop = alu_add;
 			ipacket.mem_write = 1'b1;
 			ipacket.datamux_sel = 1'b1;
