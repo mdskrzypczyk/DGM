@@ -227,11 +227,7 @@ hazard_detection hazard_detection_module
 	.mem_memwrite(mem_memwrite),	
 	
 	/*Sti Ldi*/
-<<<<<<< HEAD
-	.sti_ldi_sig(1'b0),
-=======
 	.sti_ldi_sig(sti_ldi_sig),
->>>>>>> 8a2a599f06ebcc36d84181142286fd5a9415c473
 	
 	.pc_stall(pc_stall),
 	.if_id_stall(if_id_stall),
