@@ -27,7 +27,6 @@ always #5 clk = ~clk;
 assign a_mem_write = 1'b0;
 assign a_mem_wdata = 16'h0;
 
-assign b_mem_byte_enable = 2'b11;
 
 DGM the_pip(
 	 .clk(clk),
@@ -39,7 +38,7 @@ DGM the_pip(
 	
 	/* MEM memory signals*/
 	  .mem_memaddr(b_mem_address),
-	  .mem_mem_byte_enable(),			//Connect to mem_byte_enable for memory b
+	  .mem_mem_byte_enable(b_mem_byte_enable),			//Connect to mem_byte_enable for memory b
 	  .mem_mem_resp(b_mem_resp),
 	  .mem_mem_rdata(b_mem_rdata),
 	  .mem_memread(b_mem_read),

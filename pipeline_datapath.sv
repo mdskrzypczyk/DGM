@@ -46,6 +46,7 @@ lc3b_word mem_alu_in, mem_addrgen_in;
 lc3b_word mem_br_addr_out, mem_data_out,temp_out;
 logic load_addr, mem_hold, mem_stage_resp;
 lc3b_word mem_sr_store;
+logic sti_ldi_sig;
 
 /* WB signals */
 lc3b_word wbalu_data, wbmem_data, wbmem_addr, wbpc;
@@ -153,11 +154,11 @@ ie_mem_meat IE_MEM(
 	.sr_store_in(ie_sr_store),
 	.dmem_resp(mem_stage_resp),
 	
+	.sti_ldi_sig(sti_ldi_sig),
 	.sr_store_out(mem_sr_store),
 	.meat_alu_out(mem_alu_in),
 	.meat_addrgen_out(mem_addrgen_in),
-	.out_ipacket(ie_mem_ipacket),
-	.hold(mem_hold)
+	.out_ipacket(ie_mem_ipacket)
 );
 
 //MEM MODULE
@@ -168,6 +169,7 @@ mem_stage MEM(
 	.mem_rdata(mem_mem_rdata),
 	.mem_resp(mem_mem_resp),
 	.sr_store(mem_sr_store),
+	.hold(sti_ldi_sig),
 	
 	.dmem_resp(mem_stage_resp),
 	.mem_address(mem_memaddr),
@@ -225,7 +227,7 @@ hazard_detection hazard_detection_module
 	.mem_memwrite(mem_memwrite),	
 	
 	/*Sti Ldi*/
-	.sti_ldi_sig(1'b0),
+	.sti_ldi_sig(sti_ldi_sig),
 	
 	.pc_stall(pc_stall),
 	.if_id_stall(if_id_stall),
