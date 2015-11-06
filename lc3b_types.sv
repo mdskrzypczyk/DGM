@@ -12,8 +12,10 @@ typedef logic  [7:0] lc3b_vect8;
 
 //types for cache 
 typedef logic [127:0]lc3b_burst;
-typedef logic [11:0] lc3b_tag; 
+typedef logic [8:0] lc3b_tag; 
 
+typedef logic  [3:0]  lc3b_cache_offset;
+typedef logic  [2:0]  lc3b_set;
 typedef logic  [2:0] lc3b_reg;
 typedef logic  [2:0] lc3b_nzp;
 typedef logic  [1:0] lc3b_mem_wmask;
