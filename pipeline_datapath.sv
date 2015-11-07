@@ -85,6 +85,7 @@ if_id_meat IF_ID(
 	.stall(if_id_stall),
 	.flush(flush),
 	.ipacket_in(if_ipacket),
+	.bubble(1'b0), //CHANGE
 	
 	.ipacket_out(if_id_ipacket),
 	.sr1(sr1),
@@ -122,6 +123,7 @@ id_exe_meat ID_EXE(
 	.sr1_in(id_sr1_out),
 	.sr2_in(id_sr2_out),
 	.sext_in(id_sext_out),
+	.bubble(1'b0), //CHANGE
 	
 	.ipacket_out(id_ie_ipacket),
 	.sr1_out(ie_sr1_in),
@@ -153,6 +155,7 @@ ie_mem_meat IE_MEM(
 	.meat_mem_rdata(mem_mem_rdata),
 	.sr_store_in(ie_sr_store),
 	.dmem_resp(mem_stage_resp),
+	.bubble(1'b0), //CHANGE
 	
 	.sti_ldi_sig(sti_ldi_sig),
 	.sr_store_out(mem_sr_store),
@@ -189,6 +192,7 @@ mem_wb_meat MEM_WB(
 	.alu_in(mem_alu_in),
 	.mem_data(mem_data_out),
 	.br_address(mem_addrgen_in),
+	.bubble(1'b0), //CHANGE
 	
 	.alu_out(wbalu_data),
 	.mem_data_out(wbmem_data),

@@ -10,6 +10,33 @@ module ipacket_creator
 
 always_comb
 begin
+	/*
+	ipacket.opcode = 4'b0;
+	ipacket.pc = 16'b0;
+	ipacket.inst = 16'b0;
+	ipacket.dr_sr = 3'b0;
+	ipacket.sr1 = 3'b0;
+	ipacket.sr2 = 3'b0;
+	ipacket.nzp = 3'b0;
+	ipacket.sr2_mux_sel = 1'b0;
+	ipacket.drmux_sel = 1'b0;
+	ipacket.aluop = 4'b0;
+	ipacket.braddmux_sel = 2'b0;
+	ipacket.alumux_sel = 1'b0;
+	ipacket.wdatamux_sel = 1'b0;
+	ipacket.addrmux_sel = 1'b0;
+	ipacket.mem_write = 1'b0;
+	ipacket.mem_read = 1'b0;
+	ipacket.byte_op = 1'b0;
+	ipacket.datamux_sel = 1'b0;
+	ipacket.pcmux_sel = 2'b0;
+	ipacket.regfile_mux_sel = 1'b0;
+	ipacket.load_cc = 1'b0;
+	ipacket.cc_mux_sel=2'b0;
+	ipacket.load_regfile = 1'b0;
+*/
+
+
 	/* Default Assignments */
 	/* Instruction */
 	ipacket.opcode = inst[15:12];
@@ -173,7 +200,9 @@ begin
 			ipacket.mem_read = 1'b1;			
 		end
 		
-		default : ;
+		default: begin 
+		
+		end
 	endcase
 end
 endmodule : ipacket_creator

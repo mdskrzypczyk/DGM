@@ -54,33 +54,33 @@ always_comb
 	l2i_resp = 1'b0;
 	l2i_rdata = 128'b0;
 	l2d_resp = 1'b0;
-	l2d_rdata = 128'b0;
-	
+	l2d_rdata = 128'b0;	
 	
 		/* first detecting which cache is trying to access L2 */
 		if(((IF_read == 1) || (IF_write == 1)) && (MEM_read == 0) && (MEM_write == 0))
 			begin //case IF cache doing operation 
-				/* assign outputs to L2 */
+				// assign outputs to L2 
 				l2_read = IF_read;
 				l2_write = IF_write;
 				l2_address = IF_address;
 				l2_wdata = IF_wdata;
-				/* assign output to IF cache */
+				// assign output to IF cache 
 				l2i_resp = l2_resp;
 				l2i_rdata = l2_rdata;
 			end 
-		else //all other conditions, operating MEM cache first 
+		else if(MEM_read == 1 || MEM_write == 1)//all other conditions, operating MEM cache first 
 			begin 
-				/* assign output to L2 */
+				//assign output to L2 
 				l2_read = MEM_read;
 				l2_write = MEM_write;
 				l2_address = MEM_address;
 				l2_wdata = MEM_wdata;
-				/* assign output to MEM cache */
+				// assign output to MEM cache 
 				l2d_resp = l2_resp;
 				l2d_rdata = l2_rdata;
 			end 
-		
+			
+
 	end 
  
  

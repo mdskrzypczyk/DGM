@@ -6,6 +6,7 @@ module if_id_meat
 	input logic stall,
 	input lc3b_ipacket ipacket_in,
 	input flush,
+	input bubble,
 	
 	output lc3b_ipacket ipacket_out,
 	output lc3b_reg sr1, sr2, dr,
@@ -50,7 +51,7 @@ end
 /* Output values to next stage */
 always_comb
 begin 
-	if(~stall)
+	if(~bubble)
 	begin
 		ipacket_out = packet;
 		sr1 = meat_sr1;

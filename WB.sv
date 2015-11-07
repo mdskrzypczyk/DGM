@@ -58,6 +58,7 @@ cccomp cccomp_module
 (
 	.nzp(ipacket.nzp),
 	.cc(cc_out),
+	.opcode(ipacket.opcode),
 	.branch_enable(br_taken)
 );
 
