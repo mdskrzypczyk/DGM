@@ -24,7 +24,7 @@ module pipeline_datapath(
 
 
 /* Internal signals */
-logic pc_stall, if_id_stall, id_ie_stall, ie_mem_stall, mem_wb_stall, flush;
+logic pc_stall, if_id_stall, id_ie_stall, ie_mem_stall, mem_wb_stall, flush, bubble;
 lc3b_ipacket if_ipacket, if_id_ipacket, id_ie_ipacket, ie_mem_ipacket, mem_wb_ipacket;
 
 /* IF signals */
@@ -54,6 +54,7 @@ logic[1:0] wb_pcmux_sel;
 logic wb_regfile_mux_sel;
 logic wb_drmux_sel;
 logic wb_load_regfile;
+logic br_taken;
 lc3b_reg wbdr;
 
 
@@ -209,6 +210,8 @@ WB write_back(
 	.br_addr(wbmem_addr),
 	.ipacket(mem_wb_ipacket),
 	
+	.br_sig(br_taken),
+	
 	.br_addr_out(br_addr_out),
 	.wbdata(wbdata),
 	.pcmux_sel(wb_pcmux_sel),
@@ -229,6 +232,9 @@ hazard_detection hazard_detection_module
 	.mem_mem_resp(mem_mem_resp),
 	.mem_memread(mem_memread),
 	.mem_memwrite(mem_memwrite),	
+	
+	/* WB signal */
+	.br_taken(br_taken),
 	
 	/*Sti Ldi*/
 	.sti_ldi_sig(sti_ldi_sig),

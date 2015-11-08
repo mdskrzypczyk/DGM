@@ -16,6 +16,10 @@ module WB(
 	output lc3b_word wbdata,
 	output logic regfile_mux_sel,
 	output logic load_regfile,
+	
+	//somthing new added here
+	output logic br_sig,
+	
 	output logic pip_flush
 );
 
@@ -29,6 +33,8 @@ assign br_addr_out = br_addr;
 assign wbpc = ipacket.pc;
 assign wbdr = ipacket.dr_sr;
 assign wbdrmux_sel = ipacket.drmux_sel;
+
+assign br_sig = br_taken;
 
 /* GenCC module */
 gencc genccmodule(

@@ -91,7 +91,7 @@ begin
 				2'b10:
 					out = {in[127:112], new_data[15:8], in[103:0]};
 				2'b11:
-					out = {in[127:112], new_data, in[85:0]};
+					out = {in[127:112], new_data, in[95:0]};
 				default:
 					out = 128'b0;
 			endcase
