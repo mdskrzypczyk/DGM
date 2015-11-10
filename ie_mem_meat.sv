@@ -12,6 +12,7 @@ module ie_mem_meat(
 	input lc3b_word sr_store_in,
 	input dmem_resp,
 	input flush,
+	input bubble,
 	
 	output logic sti_ldi_sig,
 	output lc3b_word sr_store_out,
@@ -64,7 +65,7 @@ begin
 	end
 	
 	/* Logic to reload address for LDI/STI */
-	else if(dmem_resp)
+	else if(dmem_resp && hold_reg == 1'b1 && (ipacket.opcode == op_ldi || ipacket.opcode == op_sti))
 	begin
 		alu_reg = meat_mem_rdata;
 		hold_reg = 0;
@@ -75,7 +76,7 @@ end
 always_comb
 begin	
 	sti_ldi_sig = hold_reg;
-	if(~stall)
+	if(~bubble)
 	begin
 		out_ipacket = ipacket;
 		meat_alu_out = alu_reg;

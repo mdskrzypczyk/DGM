@@ -9,6 +9,7 @@ module id_exe_meat
 	input lc3b_word sr2_in,
 	input lc3b_word sext_in,
 	input flush,
+	input bubble,
 
 	output lc3b_ipacket ipacket_out,
 	output lc3b_word sr1_out,
@@ -51,10 +52,22 @@ end
 /* Output to Execute Stage */
 always_comb
 begin
-	sr1_out = sr1_reg;
-	sr2_out = sr2_reg;
-	sext_out = sext_reg;
-	ipacket_out = ipacket_reg;
+	if(~bubble)
+	begin
+		sr1_out = sr1_reg;
+		sr2_out = sr2_reg;
+		sext_out = sext_reg;
+		ipacket_out = ipacket_reg;
+	end
+	
+	else
+	begin
+		sr1_out = 16'h0;
+		sr2_out = 16'h0;
+		sext_out = 16'h0;
+		ipacket_out = 1'b0;
+	end
+	
 end
 
 endmodule : id_exe_meat

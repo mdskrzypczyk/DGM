@@ -10,6 +10,7 @@ module ipacket_creator
 
 always_comb
 begin
+
 	/* Default Assignments */
 	/* Instruction */
 	ipacket.opcode = inst[15:12];
@@ -168,12 +169,19 @@ begin
 		end 
 		
 		op_trap : begin
+			ipacket.wdatamux_sel = 1'b1;
+			ipacket.braddmux_sel = 2'b11;
 			ipacket.load_regfile = 1'b1;
 			ipacket.regfile_mux_sel = 1'b1;
-			ipacket.mem_read = 1'b1;			
+			ipacket.cc_mux_sel = 2'b01;
+			ipacket.pcmux_sel = 2'b01;
+			ipacket.mem_read = 1'b1;		
+		   ipacket.drmux_sel = 1'b1;	
 		end
 		
-		default : ;
+		default: begin 
+		
+		end
 	endcase
 end
 endmodule : ipacket_creator
