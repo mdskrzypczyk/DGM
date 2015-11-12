@@ -57,6 +57,10 @@ logic wb_load_regfile;
 logic br_taken;
 lc3b_reg wbdr;
 
+/* Hazard Signals*/
+lc3b_word opA, opB;
+lc3b_word mem_data_fw, wb_data_fw;
+logic [1:0] curr_case;
 
 /* iFetch Stage */
 if_stage if_module(
@@ -138,6 +142,10 @@ exe_stage IE(
 	.SEXT(ie_sext_in),
 	.sr1(ie_sr1_in),
 	.sr2(ie_sr2_in),
+	.opA_sel(1'b0), //TODO
+	.opA_fw(opA),
+	.opB_sel(1'b0), //TODO
+	.opB_fw(opB),
 	
 	.alu_out(ie_alu_out),
 	.bradd_out(ie_addrgen_out),
@@ -222,8 +230,11 @@ WB write_back(
 	.load_regfile(wb_load_regfile)
 );
 
+/* Hazard Detection units*/
+
 hazard_detection hazard_detection_module
 (
+	/* INPUT */
 	/* If signals */
 	.if_mem_resp(if_mem_resp),
 	.if_memread(if_memread),
@@ -239,11 +250,43 @@ hazard_detection hazard_detection_module
 	/*Sti Ldi*/
 	.sti_ldi_sig(sti_ldi_sig),
 	
+	/*Packets for hazard detection*/
+	.exe_packet(id_ie_ipacket),
+	.mem_packet(ie_mem_ipacket),
+	.wb_packet(mem_wb_ipacket),
+	
+	/* OUTPUT */
+	/* Stall Signals */
 	.pc_stall(pc_stall),
 	.if_id_stall(if_id_stall),
 	.id_ie_stall(id_ie_stall),
 	.ie_mem_stall(ie_mem_stall),
-	.mem_wb_stall(mem_wb_stall)
+	.mem_wb_stall(mem_wb_stall),
+	
+	.curr_case(curr_case)
 );
+
+forwarding_selector fowarding_selector
+(
+	.mem_rdata(mem_data_out),
+	.mem_alu_data(mem_alu_in),
+	.op_mem(ie_mem_ipacket.opcode),
+	.wb_data(wbdata),
+	
+	.mem_out(mem_data_fw),
+	.wb_out(wb_data_fw)
+);
+
+operand_selector operand_selector
+(
+	.curr_case(curr_case), 
+	.mem_in(mem_data_fw),
+	.wb_in(wb_data_fw),
+	
+	.opA(opA),
+	.opB(opB)
+);
+
+
 
 endmodule : pipeline_datapath

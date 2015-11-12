@@ -10,4 +10,4 @@ module OR_module #(parameter width = 16)
 
 	assign f = (a || b);
 
-endmodule: OR
+endmodule: OR_module

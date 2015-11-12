@@ -14,11 +14,20 @@ module hazard_detection
 	
 	/*Sti Ldi*/
 	input sti_ldi_sig,
+	
+	/*Packets for hazard detection*/
+	input exe_packet,
+	input mem_packet,
+	input wb_packet,
+	
+	/* Stall Signals */
 	output logic pc_stall,
 	output logic if_id_stall,
 	output logic id_ie_stall,
 	output logic ie_mem_stall,
-	output logic mem_wb_stall
+	output logic mem_wb_stall,
+	
+	output logic [1:0] curr_case
 );
 
 always_comb
@@ -62,6 +71,14 @@ begin
 		mem_wb_stall = 1'b1;
 	end
 	
+end
+
+/* Case selecting logic*/
+always_comb
+begin
+
+	
+	curr_case = 2'b0;
 end
 
 
