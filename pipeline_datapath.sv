@@ -24,7 +24,7 @@ module pipeline_datapath(
 
 
 /* Internal signals */
-logic pc_stall, if_id_stall, id_ie_stall, ie_mem_stall, mem_wb_stall, flush;
+logic pc_stall, if_id_stall, id_ie_stall, ie_mem_stall, mem_wb_stall, flush, bubble;
 lc3b_ipacket if_ipacket, if_id_ipacket, id_ie_ipacket, ie_mem_ipacket, mem_wb_ipacket;
 
 /* IF signals */
@@ -54,6 +54,7 @@ logic[1:0] wb_pcmux_sel;
 logic wb_regfile_mux_sel;
 logic wb_drmux_sel;
 logic wb_load_regfile;
+logic br_taken;
 lc3b_reg wbdr;
 
 
@@ -85,6 +86,7 @@ if_id_meat IF_ID(
 	.stall(if_id_stall),
 	.flush(flush),
 	.ipacket_in(if_ipacket),
+	.bubble(1'b0), //CHANGE
 	
 	.ipacket_out(if_id_ipacket),
 	.sr1(sr1),
@@ -122,6 +124,7 @@ id_exe_meat ID_EXE(
 	.sr1_in(id_sr1_out),
 	.sr2_in(id_sr2_out),
 	.sext_in(id_sext_out),
+	.bubble(1'b0), //CHANGE
 	
 	.ipacket_out(id_ie_ipacket),
 	.sr1_out(ie_sr1_in),
@@ -153,6 +156,7 @@ ie_mem_meat IE_MEM(
 	.meat_mem_rdata(mem_mem_rdata),
 	.sr_store_in(ie_sr_store),
 	.dmem_resp(mem_stage_resp),
+	.bubble(1'b0), //CHANGE
 	
 	.sti_ldi_sig(sti_ldi_sig),
 	.sr_store_out(mem_sr_store),
@@ -189,6 +193,7 @@ mem_wb_meat MEM_WB(
 	.alu_in(mem_alu_in),
 	.mem_data(mem_data_out),
 	.br_address(mem_addrgen_in),
+	.bubble(1'b0), //CHANGE
 	
 	.alu_out(wbalu_data),
 	.mem_data_out(wbmem_data),
@@ -204,6 +209,8 @@ WB write_back(
 	.alu_in(wbalu_data),
 	.br_addr(wbmem_addr),
 	.ipacket(mem_wb_ipacket),
+	
+	.br_sig(br_taken),
 	
 	.br_addr_out(br_addr_out),
 	.wbdata(wbdata),
@@ -225,6 +232,9 @@ hazard_detection hazard_detection_module
 	.mem_mem_resp(mem_mem_resp),
 	.mem_memread(mem_memread),
 	.mem_memwrite(mem_memwrite),	
+	
+	/* WB signal */
+	.br_taken(br_taken),
 	
 	/*Sti Ldi*/
 	.sti_ldi_sig(sti_ldi_sig),
