@@ -78,4 +78,6 @@ begin : next_state_assignment
     state <= next_state;
 end
 
+
 endmodule : physical_memory
+

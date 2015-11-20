@@ -4,28 +4,13 @@ module DGM(
 	input clk,	
 		/* output signals dual memory */ 
 		
- input logic l2_resp,
- input lc3b_burst l2_rdata,
- output lc3b_word l2_address,
- output logic l2_read,
- output logic l2_write,
- input lc3b_burst l2_wdata				
+ input logic resp,
+ input lc3b_burst rdata,
+ output lc3b_word address,
+ output logic read,
+ output logic write,
+ input lc3b_burst wdata				
 
-/*
-	input logic l2i_resp,
-	input lc3b_burst l2i_rdata,
-	output lc3b_word IF_address,
-	output lc3b_burst IF_wdata,
-	output logic IF_read,
-	output logic IF_write,
-	
-	input logic l2d_resp,
-	input lc3b_burst l2d_rdata,
-	output lc3b_word MEM_address,
-	output lc3b_burst MEM_wdata,
-	output logic MEM_read,
-	output logic MEM_write
-*/
 	
 );
 
@@ -33,10 +18,12 @@ module DGM(
 lc3b_word if_memaddr, if_mem_rdata, mem_memaddr, mem_mem_rdata, mem_mem_wdata;
 logic [1:0] if_mem_byte_enable, mem_mem_byte_enable;
 logic if_mem_resp, if_memread, mem_mem_resp, mem_memread, mem_memwrite;
- logic IF_read, IF_write, MEM_read, MEM_write, l2i_resp, l2d_resp;
- lc3b_word IF_address,  MEM_address;
- lc3b_burst l2i_rdata,IF_wdata, l2d_rdata, MEM_wdata ;
-
+logic IF_read, IF_write, MEM_read, MEM_write, l2i_resp, l2d_resp;
+lc3b_word IF_address,  MEM_address;
+lc3b_burst l2i_rdata,IF_wdata, l2d_rdata, MEM_wdata ;
+logic l2_read, l2_write, l2_resp;
+lc3b_word l2_address; 
+lc3b_burst l2_wdata, l2_rdata;
 
 
 pipeline_datapath the_pip(
@@ -120,9 +107,30 @@ cache cache_money(
  );
  
 
+ 
+ /* the level two cache */
+ cache_module_l2 L2_CACHE(
+	.clk(clk),
+	// signal connecting to L1 
+	.mem_read(l2_read),
+	.mem_write(l2_write),
+	.mem_address(l2_address),
+	.mem_wdata(l2_wdata),
+	.mem_byte_enable(2'b11), //byte enable manually set as reading entire thing, should not matter here
+	.mem_resp(l2_resp),
+	.mem_rdata(l2_rdata),
+	// signal connecting to Physical 
+	.pmem_resp(resp),
+	.pmem_rdata(rdata),
+	.pmem_read(read),
+	.pmem_write(write),
+	.pmem_address(address),
+	.pmem_wdata(wdata)
+ );
+
+
 
 
 
 
 endmodule: DGM 
-

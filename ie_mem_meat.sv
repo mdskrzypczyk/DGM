@@ -65,6 +65,7 @@ begin
 	end
 	
 	/* Logic to reload address for LDI/STI */
+	//else if(dmem_resp)   before merge 
 	else if(dmem_resp && hold_reg == 1'b1 && (ipacket.opcode == op_ldi || ipacket.opcode == op_sti))
 	begin
 		alu_reg = meat_mem_rdata;

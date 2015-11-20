@@ -1,4 +1,4 @@
-module bitselect
+module bitselect_l2
 (
 	input sel0,
 	input sel1,
@@ -26,5 +26,4 @@ begin
 	end
 end
 
-
-endmodule : bitselect
+endmodule : bitselect_l2

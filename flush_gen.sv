@@ -3,6 +3,7 @@ import lc3b_types::*;
 module flush_gen(
 	input [3:0] opcode,
 	input branch_enable,
+	input stall,
 	
 	output logic flush
 );
@@ -10,22 +11,25 @@ module flush_gen(
 always_comb
 begin
 	flush = 0;
-	case(opcode)
-		op_br : 
-		begin
-			if(branch_enable)
+	if(~stall)
+	begin
+		case(opcode)
+			op_br : 
 			begin
-				flush = 1;
+				if(branch_enable)
+				begin
+					flush = 1;
+				end
 			end
-		end
-		op_jmp : 
-			flush = 1;
-		op_jsr :
-			flush = 1;
-		op_trap :
-			flush = 1;
-		default : ;
-	endcase
+			op_jmp : 
+				flush = 1;
+			op_jsr :
+				flush = 1;
+			op_trap :
+				flush = 1;
+			default : ;
+		endcase
+	end 
 end
 
 endmodule : flush_gen

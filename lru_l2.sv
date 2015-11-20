@@ -1,16 +1,16 @@
 import lc3b_types::*;
-module lru
+module lru_l2
 (
 	input clk,
 	input load,
 	input tag0_hit,
 	input tag1_hit,
-	input lc3b_set set,
+	input lc3b_set_l2 set,
 	output logic lru_out
 );
 
-/* lru bits changed to 16 bits for increasing cache size */
-logic lru_bits[15:0];
+/* L2 cache LRU contains total of 32 sets */
+logic lru_bits[31:0];
 
 initial
 begin
@@ -36,4 +36,4 @@ begin
 	lru_out = lru_bits[set];
 end
 
-endmodule : lru
+endmodule : lru_l2

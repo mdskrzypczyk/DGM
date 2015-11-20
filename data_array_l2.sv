@@ -1,5 +1,5 @@
 import lc3b_types::*;
-module data_array
+module data_array_l2
 (
 	input clk,
 	input load,
@@ -7,14 +7,14 @@ module data_array
 	input tag0_hit,
 	input tag1_hit,
 	input lc3b_burst in,
-	input lc3b_set set,
+	input lc3b_set_l2 set,
 	output lc3b_burst cache_out1,
 	output lc3b_burst cache_out2
 );
 
-/* cache size increased for L1 into 16 sets*/
-lc3b_burst way0 [15:0] /* synthesis ramstyle = "logic" */;
-lc3b_burst way1 [15:0] /* synthesis ramstyle = "logic" */;
+/* L2 cache contains total of 32 sets */
+lc3b_burst way0 [31:0] /* synthesis ramstyle = "logic" */;
+lc3b_burst way1 [31:0] /* synthesis ramstyle = "logic" */;
 
 initial
 begin
@@ -53,7 +53,4 @@ begin
 	cache_out2 = way1[set];
 end
 
-
-endmodule : data_array
-
-
+endmodule : data_array_l2

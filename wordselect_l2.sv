@@ -1,11 +1,9 @@
 import lc3b_types::*;
-module wordselect
+module wordselect_l2
 (
-
-	input lc3b_cache_offset offset,	//word offset input 
-	input lc3b_burst data_burst,	//burst of data  from data array 
-	output lc3b_word out	//word data given out into CPU
-
+	input lc3b_cache_offset offset,
+	input lc3b_burst data_burst,
+	output lc3b_word out
 );
 
 always_comb
@@ -42,4 +40,4 @@ begin
 	endcase
 end
 
-endmodule : wordselect
+endmodule : wordselect_l2

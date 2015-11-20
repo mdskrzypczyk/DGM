@@ -1,5 +1,3 @@
-import lc3b_types::*;
-
 module cache_control
 (
 	input clk,
@@ -82,7 +80,7 @@ begin: next_state_logic
 		cache_access: begin
 			if ((valid == 0 || (tag_hit == 0 && dirty == 0)) && (mem_read == 1 || mem_write == 1))
 				next_state = physical_read;
-			else if(tag_hit == 0 && dirty == 1)
+			else if(tag_hit == 0 && dirty == 1 && (mem_read == 1 || mem_write == 1))
 				next_state = physical_write;
 			else
 				next_state = cache_access;
@@ -110,3 +108,5 @@ begin : next_state_assignment
 end
 
 endmodule : cache_control
+
+

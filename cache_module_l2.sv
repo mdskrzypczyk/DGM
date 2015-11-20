@@ -1,6 +1,6 @@
 import lc3b_types::*;
 
-module cache_module
+module cache_module_l2
 (
 	input clk,
 	
@@ -8,7 +8,7 @@ module cache_module
 	input mem_read,
 	input mem_write,
 	input lc3b_word mem_address,
-	input lc3b_word mem_wdata,
+	input lc3b_burst mem_wdata,
 	input [1:0] mem_byte_enable,
 	
 	//Signals from Memory
@@ -17,7 +17,7 @@ module cache_module
 	
 	//Signals to CPU
 	output mem_resp,
-	output lc3b_word mem_rdata,
+	output lc3b_burst mem_rdata,
 	
 	//Signals to Memory
 	output pmem_read,
@@ -38,7 +38,7 @@ logic dirty;
 logic valid;
 logic pmem_addr_sel;
 
-cache_datapath CACHE_DATAPATH
+cache_datapath_l2 CACHE_DATAPATH_l2
 (
 	.clk(clk),
 	.load_data(load_data),
@@ -61,7 +61,7 @@ cache_datapath CACHE_DATAPATH
 	.pmem_wdata(pmem_wdata)
 );
 
-cache_control CACHE_CONTROLLER
+cache_control CACHE_CONTROLLER_l2
 (
 	.clk(clk),
 	.mem_write(mem_write),
@@ -83,5 +83,4 @@ cache_control CACHE_CONTROLLER
 	.pmem_read(pmem_read)
 );
 
-
-endmodule : cache_module
+endmodule : cache_module_l2

@@ -1,6 +1,6 @@
 import lc3b_types::*;
 
-module twobitarray
+module twobitarray_l2
 (
 	input clk,
 	input load,
@@ -8,14 +8,14 @@ module twobitarray
 	input tag0_hit,
 	input tag1_hit,
 	input lru,
-	input lc3b_set set,
+	input lc3b_set_l2 set,
 	output logic outbit0,
 	output logic outbit1
 );
 
-/* increase the size of the 2 bit array into 16 sets as increasing the size of l1 cache*/
-logic bit0 [15:0];
-logic bit1 [15:0];
+/* L2 cache contains total of 32 sets */
+logic bit0 [31:0];
+logic bit1 [31:0];
 
 initial
 begin
@@ -72,4 +72,4 @@ begin
 	outbit1 = bit1[set];
 end
 
-endmodule : twobitarray
+endmodule : twobitarray_l2
