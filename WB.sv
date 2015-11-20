@@ -6,6 +6,7 @@ module WB(
 	input lc3b_word mem_in, alu_in,
 	input lc3b_word br_addr,
 	input lc3b_ipacket ipacket, 
+	input logic stall,
 	
 	/* data output */
 	output lc3b_word br_addr_out,
@@ -15,7 +16,12 @@ module WB(
 	output logic[1:0] pcmux_sel,
 	output lc3b_word wbdata,
 	output logic regfile_mux_sel,
+
 	output logic load_regfile,
+	
+	//somthing new added here
+	output logic br_sig,
+	
 	output logic pip_flush
 );
 
@@ -29,6 +35,9 @@ assign br_addr_out = br_addr;
 assign wbpc = ipacket.pc;
 assign wbdr = ipacket.dr_sr;
 assign wbdrmux_sel = ipacket.drmux_sel;
+
+
+assign br_sig = br_taken;
 
 /* GenCC module */
 gencc genccmodule(
@@ -58,12 +67,14 @@ cccomp cccomp_module
 (
 	.nzp(ipacket.nzp),
 	.cc(cc_out),
+	.opcode(ipacket.opcode),
 	.branch_enable(br_taken)
 );
 
 flush_gen pipe_flush(
 	.opcode(ipacket.opcode),
 	.branch_enable(br_taken),
+	.stall(stall),
 	.flush(pip_flush)
 );
 

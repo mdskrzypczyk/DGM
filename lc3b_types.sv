@@ -12,8 +12,12 @@ typedef logic  [7:0] lc3b_vect8;
 
 //types for cache 
 typedef logic [127:0]lc3b_burst;
-typedef logic [11:0] lc3b_tag; 
+typedef logic [7:0] lc3b_tag; 	//change the tag bit into 8 bits to increment the cache size
+typedef logic [6:0] lc3b_tag_l2; //the level 2 cache tag only have 7 bits 
 
+typedef logic  [3:0]  lc3b_cache_offset;
+typedef logic  [3:0]  lc3b_set;	//change the set bit into 4 bits to cover total of 16 sets in the cache
+typedef logic  [4:0]  lc3b_set_l2; //total of 5 bits to cover 32 sets in l2 cache
 typedef logic  [2:0] lc3b_reg;
 typedef logic  [2:0] lc3b_nzp;
 typedef logic  [1:0] lc3b_mem_wmask;
@@ -56,6 +60,11 @@ typedef struct packed {
 	lc3b_reg sr1;
 	lc3b_reg sr2;
 	lc3b_nzp nzp;
+	
+	/* Hazard detection */
+	logic forward; //the instruction has  a register that it is going to update
+	logic opA; //The instruction has an data in sr1 that could have data forwarded to it
+	logic opB; //The instruction has an data in sr1 that could have data forwarded to it
 	
 	/* IF */
 	

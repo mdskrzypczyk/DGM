@@ -21,10 +21,11 @@ module pipeline_datapath(
 	output logic mem_memwrite
 );
 
-
-
 /* Internal signals */
+
 logic pc_stall, if_id_stall, id_ie_stall, ie_mem_stall, mem_wb_stall, flush;
+logic if_id_bubble, id_ie_bubble, ie_mem_bubble, mem_wb_bubble;
+
 lc3b_ipacket if_ipacket, if_id_ipacket, id_ie_ipacket, ie_mem_ipacket, mem_wb_ipacket;
 
 /* IF signals */
@@ -54,8 +55,12 @@ logic[1:0] wb_pcmux_sel;
 logic wb_regfile_mux_sel;
 logic wb_drmux_sel;
 logic wb_load_regfile;
+logic br_taken;
 lc3b_reg wbdr;
 
+/* Hazard Signals*/
+lc3b_word mem_data_forward, wb_data_forward;
+logic [1:0] opAmux_sel, opBmux_sel, opSrmux_sel;
 
 /* iFetch Stage */
 if_stage if_module(
@@ -85,6 +90,7 @@ if_id_meat IF_ID(
 	.stall(if_id_stall),
 	.flush(flush),
 	.ipacket_in(if_ipacket),
+	.bubble(if_id_bubble), //CHANGE
 	
 	.ipacket_out(if_id_ipacket),
 	.sr1(sr1),
@@ -122,6 +128,7 @@ id_exe_meat ID_EXE(
 	.sr1_in(id_sr1_out),
 	.sr2_in(id_sr2_out),
 	.sext_in(id_sext_out),
+	.bubble(id_ie_bubble), //CHANGE
 	
 	.ipacket_out(id_ie_ipacket),
 	.sr1_out(ie_sr1_in),
@@ -135,6 +142,11 @@ exe_stage IE(
 	.SEXT(ie_sext_in),
 	.sr1(ie_sr1_in),
 	.sr2(ie_sr2_in),
+	.opAmux_sel(opAmux_sel), 
+	.opBmux_sel(opBmux_sel), 
+	.opSrmux_sel(opSrmux_sel), 
+	.mem_data_forward(mem_data_forward),
+	.wb_data_forward(wb_data_forward),
 	
 	.alu_out(ie_alu_out),
 	.bradd_out(ie_addrgen_out),
@@ -153,6 +165,7 @@ ie_mem_meat IE_MEM(
 	.meat_mem_rdata(mem_mem_rdata),
 	.sr_store_in(ie_sr_store),
 	.dmem_resp(mem_stage_resp),
+	.bubble(ie_mem_bubble), //CHANGE
 	
 	.sti_ldi_sig(sti_ldi_sig),
 	.sr_store_out(mem_sr_store),
@@ -189,6 +202,7 @@ mem_wb_meat MEM_WB(
 	.alu_in(mem_alu_in),
 	.mem_data(mem_data_out),
 	.br_address(mem_addrgen_in),
+	.bubble(mem_wb_bubble), //CHANGE
 	
 	.alu_out(wbalu_data),
 	.mem_data_out(wbmem_data),
@@ -199,11 +213,13 @@ mem_wb_meat MEM_WB(
 //WB MODULE
 WB write_back(
 	.clk(clk),
-	.pip_flush(flush),
 	.mem_in(wbmem_data),
 	.alu_in(wbalu_data),
 	.br_addr(wbmem_addr),
 	.ipacket(mem_wb_ipacket),
+	.stall(mem_wb_stall),
+	
+	.br_sig(br_taken),
 	
 	.br_addr_out(br_addr_out),
 	.wbdata(wbdata),
@@ -212,11 +228,16 @@ WB write_back(
 	.wbdr(wbdr),
 	.wbdrmux_sel(wb_drmux_sel),
 	.regfile_mux_sel(wb_regfile_mux_sel),
-	.load_regfile(wb_load_regfile)
+	.load_regfile(wb_load_regfile),
+	.pip_flush(flush)
 );
+
+
+/* Hazard Detection units*/
 
 hazard_detection hazard_detection_module
 (
+	/* INPUT */
 	/* If signals */
 	.if_mem_resp(if_mem_resp),
 	.if_memread(if_memread),
@@ -226,14 +247,52 @@ hazard_detection hazard_detection_module
 	.mem_memread(mem_memread),
 	.mem_memwrite(mem_memwrite),	
 	
+	/* WB signal */
+	.br_taken(br_taken),
+	
 	/*Sti Ldi*/
 	.sti_ldi_sig(sti_ldi_sig),
 	
+
+	/*Packets for hazard detection*/
+	.exe_packet(id_ie_ipacket),
+	.mem_packet(ie_mem_ipacket),
+	.wb_packet(mem_wb_ipacket),
+	
+	/* OUTPUT */
+	/* Stall Signals */
 	.pc_stall(pc_stall),
 	.if_id_stall(if_id_stall),
 	.id_ie_stall(id_ie_stall),
 	.ie_mem_stall(ie_mem_stall),
-	.mem_wb_stall(mem_wb_stall)
+	.mem_wb_stall(mem_wb_stall),
+	
+	.if_id_bubble(if_id_bubble),
+	.id_ie_bubble(id_ie_bubble),
+	.ie_mem_bubble(ie_mem_bubble),
+	.mem_wb_bubble(mem_wb_bubble),
+	
+	/* Forwarding signals*/
+	.opAmux_sel(opAmux_sel),
+	.opBmux_sel(opBmux_sel),
+	.opSrmux_sel(opSrmux_sel)
+	
 );
+
+forwarding_selector fowarding_selector
+(
+	.mem_rdata(mem_data_out),
+	.mem_alu_data(mem_alu_in),
+	.mem_addrgen(mem_addrgen_in),
+	.mem_packet(ie_mem_ipacket),
+	.wb_data(wbdata),
+	.wb_packet(mem_wb_ipacket),
+	
+	.mem_out(mem_data_forward),
+	.wb_out(wb_data_forward)
+);
+
+
+
 
 endmodule : pipeline_datapath

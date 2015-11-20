@@ -5,6 +5,7 @@ module mem_wb_meat(
 	input lc3b_ipacket ipacket,
 	input lc3b_word alu_in, mem_data, br_address,
 	input flush,
+	input bubble,
 	
 	/* control signal */
 	input clk,
@@ -50,7 +51,7 @@ end
 /* Output to WB Stage */
 always_comb
 begin 
-	if(~stall)
+	if(~bubble)
 	begin
 		ipacket_out = packet;
 		mem_data_out = memdata;
