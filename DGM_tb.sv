@@ -36,13 +36,11 @@ logic [127:0] wdata;
 initial clk = 0;
 always #5 clk = ~clk;
 
-//assign a_mem_write = 1'b0;
-//assign a_mem_wdata = 16'h0;
 
-//assign b_mem_byte_enable = 2'b11;
-
-
-
+//test
+logic pmem_resp_t;
+initial pmem_resp_t = 0;
+always #2000 pmem_resp_t = 1;
 
 DGM top(
 		
@@ -52,12 +50,11 @@ DGM top(
 	.address(address),
 	.read(read),
 	.write(write),
-	.wdata(wdata)
+	.wdata(wdata),
 	
+	//testing
+	.pmem_resp_t(pmem_resp_t)
 );
-
-
-
 
 
 physical_memory the_memory(

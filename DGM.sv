@@ -9,7 +9,10 @@ module DGM(
  output lc3b_word address,
  output logic read,
  output logic write,
- input lc3b_burst wdata				
+ input lc3b_burst wdata,
+
+	//testing
+input pmem_resp_t
 
 	
 );
@@ -127,6 +130,44 @@ cache cache_money(
 	.pmem_address(address),
 	.pmem_wdata(wdata)
  );
+ 
+ 
+ 
+ 
+ 
+
+
+//static output test signals
+logic resp_t, pmem_read_t, pmem_write_t;
+lc3b_burst rdata_t, pmem_wdata_t;
+lc3b_word pmem_address_t;
+
+victim_cache vc_test
+(
+   .clk(clk),
+	
+	.arbiter_address(16'h0),
+	
+	.read(1'b1),
+   .write(1'b0),
+   .address(16'haaaa),
+   .wdata(128'h0),
+	
+	.pmem_resp(pmem_resp_t),
+	.pmem_rdata(128'hbbbb),
+	
+	//outputs
+   .resp(resp_t),
+   .rdata(rdata_t),
+	
+	.pmem_read(pmem_read_t),
+	.pmem_write(pmem_write_t),
+	.pmem_address(pmem_address_t),
+	.pmem_wdata(pmem_wdata_t)
+);
+
+ 
+ 
 
 
 
