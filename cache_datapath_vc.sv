@@ -16,6 +16,7 @@ module cache_datapath_vc
 	input logic waymux_sel,
 	input logic load_buffer,
 	input logic load_entry,
+	input logic pmem_addressmux_sel,
 	
 	//from physical memory
 	input lc3b_burst pmem_rdata_in,
@@ -186,8 +187,17 @@ mux4 #(.width(1)) dirtymux
 	.f(dirty)
 );
 
+mux2 #(.width(16)) pmem_addressmux
+(
+	.sel(pmem_addressmux_sel),
+	.a(l2_address), 
+	.b({tagmux_out , l2_offset}),
+	
+	.f(pmem_address)
+);
+
+
 assign pmem_wdata = datamux_out;
-assign pmem_address = {tagmux_out + l2_offset};
 
 endmodule : cache_datapath_vc
 

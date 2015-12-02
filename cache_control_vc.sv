@@ -23,6 +23,7 @@ module cache_control_vc
 	output logic waymux_sel,
 	output logic load_buffer,
 	output logic load_entry,
+	output logic pmem_addressmux_sel,
 	
 	//to physical memory
 	output logic pmem_read,
@@ -53,6 +54,7 @@ begin : state_actions
 	waymux_sel = 1'b0;
 	load_buffer = 1'b0;
 	load_entry = 1'b0;
+	pmem_addressmux_sel = 1'b0;
 
 	case(state)	
 	
@@ -80,6 +82,7 @@ begin : state_actions
 	s_pmem_write : begin
 		pmem_write = 1'b1;
 		waymux_sel = 1'b0;
+		pmem_addressmux_sel = 1'b1;
 	end
 	
 	s_pmem_read : begin

@@ -29,7 +29,7 @@ module victim_cache
 );
 
 /* Internal Signals */
-logic rdatamux_sel,waymux_sel;
+logic rdatamux_sel,waymux_sel,pmem_addressmux_sel;
 logic load_buffer, load_entry;
 logic dirty;
 logic swap, hit;
@@ -49,6 +49,7 @@ cache_datapath_vc datapath
 	.waymux_sel(waymux_sel),
 	.load_buffer(load_buffer),
 	.load_entry(load_entry),
+	.pmem_addressmux_sel(pmem_addressmux_sel),
 	
 	.pmem_rdata_in(pmem_rdata),
 	
@@ -84,6 +85,7 @@ cache_control_vc control
 	.waymux_sel(waymux_sel),
 	.load_buffer(load_buffer),
 	.load_entry(load_entry),
+	.pmem_addressmux_sel(pmem_addressmux_sel),
 	
 	.pmem_read(pmem_read),
 	.pmem_write(pmem_write)
