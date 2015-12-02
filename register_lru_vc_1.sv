@@ -1,4 +1,4 @@
-module register_lru_vc #(parameter width = 16)
+module register_lru_vc_1 #(parameter width = 16)
 (
     input clk,
     input load,
@@ -13,7 +13,7 @@ logic [width-1:0] data;
  */
 initial
 begin
-	data = 2'b00;
+	data = 2'b01;
 end
 
 always_ff @(posedge clk)
@@ -29,4 +29,4 @@ begin
     out = data;
 end
 
-endmodule : register_lru_vc
+endmodule : register_lru_vc_1

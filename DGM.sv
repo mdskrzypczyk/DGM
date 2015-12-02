@@ -9,11 +9,7 @@ module DGM(
  output lc3b_word address,
  output logic read,
  output logic write,
- input lc3b_burst wdata,
-
-	//testing
-input pmem_resp_t
-
+ input lc3b_burst wdata
 	
 );
 
@@ -27,6 +23,11 @@ lc3b_burst l2i_rdata,IF_wdata, l2d_rdata, MEM_wdata ;
 logic l2_read, l2_write, l2_resp;
 lc3b_word l2_address; 
 lc3b_burst l2_wdata, l2_rdata;
+
+logic vc_read, vc_write, vc_resp;
+lc3b_word vc_address;
+lc3b_burst vc_wdata, vc_rdata;
+ 
 
 
 pipeline_datapath the_pip(
@@ -122,56 +123,39 @@ cache cache_money(
 	.mem_byte_enable(2'b11), //byte enable manually set as reading entire thing, should not matter here
 	.mem_resp(l2_resp),
 	.mem_rdata(l2_rdata),
-	// signal connecting to Physical 
+	// signal connecting to Physical or victim cache
+	.pmem_resp(vc_resp),
+	.pmem_rdata(vc_rdata),
+	.pmem_read(vc_read),
+	.pmem_write(vc_write),
+	.pmem_address(vc_address),
+	.pmem_wdata(vc_wdata)
+ );
+
+ /* Victim Cache */
+victim_cache the_executioner
+(
+	//Inputs
+   .clk(clk),
+	
+	.arbiter_address(l2_address),
+	
+	.read(vc_read),
+   .write(vc_write),
+   .address(vc_address),
+   .wdata(vc_wdata),
+	
 	.pmem_resp(resp),
 	.pmem_rdata(rdata),
+	
+	//Outputs
+	.resp(vc_resp),
+   .rdata(vc_rdata),
+	
 	.pmem_read(read),
 	.pmem_write(write),
 	.pmem_address(address),
 	.pmem_wdata(wdata)
- );
- 
- 
- 
- 
- 
-
-
-//static output test signals
-logic resp_t, pmem_read_t, pmem_write_t;
-lc3b_burst rdata_t, pmem_wdata_t;
-lc3b_word pmem_address_t;
-
-victim_cache vc_test
-(
-   .clk(clk),
-	
-	.arbiter_address(16'h0),
-	
-	.read(1'b1),
-   .write(1'b0),
-   .address(16'haaaa),
-   .wdata(128'h0),
-	
-	.pmem_resp(pmem_resp_t),
-	.pmem_rdata(128'hbbbb),
-	
-	//outputs
-   .resp(resp_t),
-   .rdata(rdata_t),
-	
-	.pmem_read(pmem_read_t),
-	.pmem_write(pmem_write_t),
-	.pmem_address(pmem_address_t),
-	.pmem_wdata(pmem_wdata_t)
 );
-
- 
- 
-
-
-
-
-
 
 endmodule: DGM 

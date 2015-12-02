@@ -56,7 +56,10 @@ cache_datapath_vc datapath
 	.swap(swap),
 	.dirty(dirty),
 	
-	.rdata_out(rdata)
+	.rdata_out(rdata),
+	
+	.pmem_address(pmem_address),
+	.pmem_wdata(pmem_wdata)
 );
 
 

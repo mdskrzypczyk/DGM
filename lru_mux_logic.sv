@@ -1,12 +1,9 @@
-import lc3b_types::*;
-
 module lru_mux_logic(
 	input logic [1:0] used_way,
 	input logic [1:0] reg0_out,
 	input logic [1:0] reg1_out,
 	input logic [1:0] reg2_out,
 	input logic [1:0] reg3_out,
-	
 	
 	output logic mux1_sel,
 	output logic mux2_sel,

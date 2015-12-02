@@ -36,12 +36,6 @@ logic [127:0] wdata;
 initial clk = 0;
 always #5 clk = ~clk;
 
-
-//test
-logic pmem_resp_t;
-initial pmem_resp_t = 0;
-always #2000 pmem_resp_t = 1;
-
 DGM top(
 		
 	.clk(clk),
@@ -50,10 +44,7 @@ DGM top(
 	.address(address),
 	.read(read),
 	.write(write),
-	.wdata(wdata),
-	
-	//testing
-	.pmem_resp_t(pmem_resp_t)
+	.wdata(wdata)
 );
 
 
