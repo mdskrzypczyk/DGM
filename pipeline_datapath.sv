@@ -18,7 +18,9 @@ module pipeline_datapath(
 	input lc3b_word mem_mem_rdata,
 	output logic mem_memread,
 	output lc3b_word mem_mem_wdata,
-	output logic mem_memwrite
+	output logic mem_memwrite,
+	
+	input lc3b_word l1i_read_miss_count, l1i_write_miss_count, l1d_read_miss_count, l1d_write_miss_count, l2_read_miss_count, l2_write_miss_count
 );
 
 /* Internal signals */
@@ -41,6 +43,7 @@ lc3b_word id_sr1_out, id_sr2_out,id_sext_out;
 lc3b_word ie_sr1_in, ie_sr2_in,ie_sext_in;
 lc3b_word ie_alu_out, ie_addrgen_out;
 lc3b_word ie_sr_store;
+lc3b_word bubble_count;
 
 /* MEM signals */
 lc3b_word mem_alu_in, mem_addrgen_in;
@@ -138,6 +141,7 @@ id_exe_meat ID_EXE(
 
 //EXECUTE MODULE
 exe_stage IE(
+	.clk(clk),
 	.ipacket(id_ie_ipacket),
 	.SEXT(ie_sext_in),
 	.sr1(ie_sr1_in),
@@ -150,7 +154,15 @@ exe_stage IE(
 	
 	.alu_out(ie_alu_out),
 	.bradd_out(ie_addrgen_out),
-	.sr_store(ie_sr_store)
+	.sr_store(ie_sr_store),
+	
+	.bubble_count(bubble_count),
+	.l1i_read_miss(l1i_read_miss_count),
+	.l1i_write_miss(l1i_write_miss_count),
+	.l1d_read_miss(l1d_read_miss_count),
+	.l1d_write_miss(l1d_write_miss_count),
+	.l2_read_miss(l2_read_miss_count),
+	.l2_write_miss(l2_write_miss_count)
 );
 
 //IE/MEM MEAT
@@ -292,7 +304,11 @@ forwarding_selector fowarding_selector
 	.wb_out(wb_data_forward)
 );
 
-
+stallcounter16 bubble_counter(
+	.clk(clk),
+	.stall(pc_stall),
+	.bubble_count(bubble_count)
+);
 
 
 endmodule : pipeline_datapath
