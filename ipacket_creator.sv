@@ -156,6 +156,13 @@ begin
 			ipacket.load_regfile = 1'b1;
 			ipacket.forward = 1'b1;
 			ipacket.opA = 1'b1;
+			ipacket.opB = 1'b1;
+			case(inst[5:3])
+				3'b000: ipacket.aluop = alu_nor;
+				3'b001: ipacket.aluop = alu_nand;
+				3'b010: ipacket.aluop = alu_xnor;
+				default : ;
+			endcase
 		end
 		
 		op_shf : begin

@@ -21,6 +21,9 @@ begin
 		  alu_or : f = (a | b);
 		  alu_sub: f = (a - b);
 		  alu_xor: f = (a ^ b);
+		  alu_nor: f = ~(a | b);
+		  alu_nand: f = ~(a & b);
+		  alu_xnor: f = ~(a ^ b);
         default: $display("Unknown aluop");
     endcase
 end
