@@ -67,6 +67,7 @@ begin
 			ipacket.forward = 1'b1;
 			ipacket.opA = 1'b1;
 			ipacket.ex_res = 1'b1;
+			ipacket.res_sel = 1'b1;
 			if(inst[5] == 1'b0)
 			begin
 				ipacket.opB = 1'b1;
@@ -82,6 +83,7 @@ begin
 			ipacket.forward = 1'b1;
 			ipacket.opA = 1'b1;
 			ipacket.ex_res = 1'b1;
+			ipacket.res_sel = 1'b1;
 			if(inst[5] == 1'b0)
 			begin
 				ipacket.opB = 1'b1;
@@ -159,7 +161,7 @@ begin
 			ipacket.cc_mux_sel = 2'b10;
 			ipacket.load_cc = 1'b1;
 			ipacket.forward = 1'b1;
-			ipacket.mem_res = 1'b1;
+			ipacket.ex_res = 1'b1;
 		end
 		
 		op_not : begin
@@ -170,6 +172,7 @@ begin
 			ipacket.forward = 1'b1;
 			ipacket.opA = 1'b1;
 			ipacket.ex_res = 1'b1;
+			ipacket.res_sel = 1'b1;
 		end
 		
 		op_shf : begin
@@ -180,6 +183,7 @@ begin
 			ipacket.forward = 1'b1;
 			ipacket.opA = 1'b1;
 			ipacket.ex_res = 1'b1;
+			ipacket.res_sel = 1'b1;
 			case(inst[5:4])
 				2'b00 :
 					ipacket.aluop = alu_sll;
