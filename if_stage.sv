@@ -25,7 +25,7 @@ module if_stage
 );
 
 /*internal signals*/
-lc3b_word pcmux_out, pc_out,  plus2_out;
+lc3b_word pcmux_out, pc_in, pc_out,  plus2_out;
 logic load_pc;
  
 
@@ -47,8 +47,6 @@ mux4 #(.width(16)) pcmux
 	
 	.f(pcmux_out)
 );
-
-
 
 /* PC Register */
 register pc_module

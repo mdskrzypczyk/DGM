@@ -8,9 +8,9 @@ module pcmuxgen(
 always_comb
 begin
 	if(branch_enable && opcode == 4'b0000)
-		wb_pc_mux_sel = 2'b10;
-	else
 		wb_pc_mux_sel = pcmux_sel;
+	else
+		wb_pc_mux_sel = 2'b00;
 end
 
 endmodule : pcmuxgen
