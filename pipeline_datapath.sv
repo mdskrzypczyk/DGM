@@ -44,6 +44,7 @@ lc3b_word ie_sr1_in, ie_sr2_in,ie_sext_in;
 lc3b_word ie_alu_out, ie_addrgen_out;
 lc3b_word ie_sr_store;
 lc3b_word bubble_count;
+logic alg_done;
 
 /* MEM signals */
 lc3b_word mem_alu_in, mem_addrgen_in;
@@ -152,6 +153,7 @@ exe_stage IE(
 	.mem_data_forward(mem_data_forward),
 	.wb_data_forward(wb_data_forward),
 	
+	.alg_done(alg_done),
 	.alu_out(ie_alu_out),
 	.bradd_out(ie_addrgen_out),
 	.sr_store(ie_sr_store),
@@ -253,6 +255,9 @@ hazard_detection hazard_detection_module
 	/* If signals */
 	.if_mem_resp(if_mem_resp),
 	.if_memread(if_memread),
+	
+	/* Ex Signals */
+	.alg_done(alg_done),
 	
 	/* Mem signals */
 	.mem_mem_resp(mem_mem_resp),

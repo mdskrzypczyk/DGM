@@ -14,6 +14,7 @@ module exe_stage
 	input lc3b_word wb_data_forward,
 	input lc3b_word l1i_read_miss, l1i_write_miss, l1d_read_miss, l1d_write_miss, l2_read_miss, l2_write_miss, bubble_count, 
 	
+	output alg_done,
 	output lc3b_word alu_out,
 	output lc3b_word bradd_out,
 	output lc3b_word sr_store
@@ -46,9 +47,12 @@ adder bradd
 );
 
 alg_unit algebra(
+	.clk(clk),
 	.opA(opA),
 	.opB(opB),
 	.op_x_bits(ipacket.op_x_bits),
+	
+	.done(alg_done),
 	.hi_bits(alg_hi_in),
 	.lo_bits(alg_lo_in)
 );
