@@ -3,7 +3,10 @@ import lc3b_types::*;
 module exe_stage
 (
 	input clk,
+
+	input stall,
 	input lc3b_ipacket ipacket,
+	input lc3b_ipacket mem_ipacket,
 	input lc3b_word SEXT,
 	input lc3b_word sr1,
 	input lc3b_word sr2,
@@ -13,8 +16,13 @@ module exe_stage
 	input lc3b_word mem_data_forward,
 	input lc3b_word wb_data_forward,
 	input lc3b_word l1i_read_miss, l1i_write_miss, l1d_read_miss, l1d_write_miss, l2_read_miss, l2_write_miss, bubble_count, 
-	
+
 	output alg_done,
+	output logic [1:0] pcmux_sel,
+	output lc3b_word pc_addr_out,
+	output logic pip_flush,
+	output logic br_taken,
+
 	output lc3b_word alu_out,
 	output lc3b_word bradd_out,
 	output lc3b_word sr_store
@@ -24,6 +32,9 @@ lc3b_word alumux_out, braddmux_out, alu_res;
 lc3b_word opA, opB;
 lc3b_word alg_hi_in, alg_lo_in;
 lc3b_word alg_hi_bits, alg_lo_bits;
+logic br_sig;
+
+assign br_taken = br_sig;
 
 /* BR Add Mux */
 mux4 braddmux
@@ -145,6 +156,33 @@ mux4 #(.width(16)) opSrmux
 	.d(16'b0), 
 	
 	.f(sr_store)
+);
+
+
+/* Branch Resolution */
+ex_branch_res ex_branch_resolution(
+	.clk(clk),
+	.ex_ipacket(ipacket),
+	.mem_ipacket(mem_ipacket),
+	.ex_alu_res(alu_out),
+	.ex_addr_res(bradd_out),
+	.mem_res(mem_data_forward),
+	.branch_enable(br_sig),
+	.br_addr(pc_addr_out)
+);
+
+flush_gen pipe_flush(
+	.opcode(ipacket.opcode),
+	.branch_enable(br_sig),
+	.stall(stall),
+	.flush(pip_flush)
+);
+
+pcmuxgen pcmuxselgen(
+	.pcmux_sel(ipacket.pcmux_sel),
+	.opcode(ipacket.opcode),
+	.branch_enable(br_sig),
+	.wb_pc_mux_sel(pcmux_sel)
 );
 
 endmodule : exe_stage

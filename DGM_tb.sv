@@ -36,14 +36,6 @@ logic [127:0] wdata;
 initial clk = 0;
 always #5 clk = ~clk;
 
-//assign a_mem_write = 1'b0;
-//assign a_mem_wdata = 16'h0;
-
-//assign b_mem_byte_enable = 2'b11;
-
-
-
-
 DGM top(
 		
 	.clk(clk),
@@ -53,11 +45,7 @@ DGM top(
 	.read(read),
 	.write(write),
 	.wdata(wdata)
-	
 );
-
-
-
 
 
 physical_memory the_memory(

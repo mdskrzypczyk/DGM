@@ -21,6 +21,7 @@ typedef logic  [4:0]  lc3b_set_l2; //total of 5 bits to cover 32 sets in l2 cach
 typedef logic  [2:0] lc3b_reg;
 typedef logic  [2:0] lc3b_nzp;
 typedef logic  [1:0] lc3b_mem_wmask;
+typedef logic  [11:0] lc3b_tag_vc; //addded for new expanded tag bits in fully associative victim cache
 
 typedef enum bit [3:0] {
     op_add  = 4'b0001,
@@ -98,6 +99,8 @@ typedef struct packed {
 	logic [3:0] alu_res_sel;
 	logic load_alg_reg;
 	logic [2:0] op_x_bits;
+	logic [1:0] br_res_sel;
+	logic [1:0] pc_addr_sel;
 	
 	/* MEM */
 	logic wdatamux_sel;

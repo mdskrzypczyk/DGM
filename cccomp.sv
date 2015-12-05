@@ -3,7 +3,7 @@ import lc3b_types::*;
 module cccomp
 (
 	input lc3b_nzp cc,
-	input lc3b_reg nzp,
+	input lc3b_nzp nzp,
 	input [3:0] opcode,
 	output logic branch_enable
 );
