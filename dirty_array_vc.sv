@@ -1,5 +1,3 @@
-import lc3b_types::*;
-
 module dirty_array_vc(
 	input clk,
 	input load,

@@ -1,5 +1,3 @@
-import lc3b_types::*;
-
 module cache_control_vc
 (
 	input logic clk,
