@@ -14,6 +14,8 @@ typedef logic  [7:0] lc3b_vect8;
 typedef logic [127:0]lc3b_burst;
 typedef logic [7:0] lc3b_tag; 	//change the tag bit into 8 bits to increment the cache size
 typedef logic [6:0] lc3b_tag_l2; //the level 2 cache tag only have 7 bits 
+typedef logic [9:0] lc3b_pc_tag; //the tag bits for pc, total of 
+typedef logic [1:0] lc3b_pc_ways; //the pc set index 2 bits for 4 way 
 
 typedef logic  [3:0]  lc3b_cache_offset;
 typedef logic  [3:0]  lc3b_set;	//change the set bit into 4 bits to cover total of 16 sets in the cache
@@ -61,6 +63,13 @@ typedef struct packed {
 	lc3b_reg sr2;
 	lc3b_nzp nzp;
 	
+	/* branch prediction bits */
+	logic branch; //1 indicate this is a branch (BR, JSR, JSRR, JMP), 0 indicate other instructions 
+	logic btb_miss; //1 indicate btb miss fetch, 0 indicate btb hit 
+	logic [1:0] ways; //the way offset for branch prediction use
+	logic [15:0] target_pc; //the pc target address 
+	logic br_prediction; //the branch prediction bit 
+	
 	/* Hazard detection */
 	logic forward; //the instruction has  a register that it is going to update
 	logic opA; //The instruction has an data in sr1 that could have data forwarded to it
@@ -76,6 +85,10 @@ typedef struct packed {
 	lc3b_aluop aluop;
 	logic [1:0] braddmux_sel;
 	logic alumux_sel;
+	logic ex_res;
+	logic res_sel;
+	logic mem_res;
+	logic [1:0] pc_addr_sel;
 	
 	/* MEM */
 	logic wdatamux_sel;

@@ -4,6 +4,7 @@ module flush_gen(
 	input [3:0] opcode,
 	input branch_enable,
 	input stall,
+	input lc3b_ipacket packet_in,
 	
 	output logic flush
 );
@@ -16,7 +17,7 @@ begin
 		case(opcode)
 			op_br : 
 			begin
-				if(branch_enable)
+				if(branch_enable != packet_in.br_prediction)
 				begin
 					flush = 1;
 				end

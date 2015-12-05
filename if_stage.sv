@@ -5,10 +5,20 @@ module if_stage
 	input clk,
 	input lc3b_word br_add,
 	input lc3b_word wb_data,
-	input[1:0] pcmux_sel,
-	input pc_stall,
+	input logic[1:0] pcmux_sel,
+	input logic pc_stall,
+	input logic tag_hit, //the tag hit from BTB
+	input lc3b_pc_ways ways, //ways offset from BTB 
+	input logic flush, //flushing signal 
+	input lc3b_word flush_pc, //the pc value after flush
+	input logic br_taken,
+	
+	input lc3b_word pc_tar, //the pc target 
+	input taken_prediction, //the branch prediction bit 
+	input lc3b_ipacket br_packet, //the packet from next stage contain prediction information 
 	
 	output lc3b_ipacket packet,
+	output lc3b_word if_pc, //currently use the pcmux output, not the pc module output 
 	
 	// temporary output signals for memory module 
 	//output signal to memory 
@@ -27,6 +37,8 @@ module if_stage
 /*internal signals*/
 lc3b_word pcmux_out, pc_out,  plus2_out;
 logic load_pc;
+
+assign if_pc = pcmux_out;
  
 
 /* PC PLUS 2 UNIT */
@@ -36,35 +48,40 @@ plus2 plus2(
 	.out(plus2_out)
 );
 
-/* LOAD PC MUX */
-mux4 #(.width(16)) pcmux  
-(
-	.sel(pcmux_sel),
-	.a(plus2_out),
-	.b(wb_data),
-	.c(br_add),
-	.d(16'h0),				//USEABLE SPACE
+pc_select pcmux(
+	.pcmux_sel(pcmux_sel),
+	.plus2_out(plus2_out),
+	.wb_data(wb_data),
+	.br_add(br_add),
+
 	
-	.f(pcmux_out)
+	.pcmux_out(pcmux_out)
 );
 
 
 
-/* PC Register */
-register pc_module
-(
+pc_module PC_MODULE(
 	.clk(clk),
 	.load(~pc_stall),
-	.in(pcmux_out),
+	.pcmux_out(pcmux_out),
+	.pc_predict(pc_tar),
+	.flush_pc(flush_pc),
+	.br_sig(br_taken),
+	.flush(flush),
+	.prediction_taken(taken_prediction),
 	
 	.out(pc_out)
-); 
+);
 
 /* Ipacket Generator */
 ipacket_creator ipacket_creator 
 (
 	.inst(if_mem_rdata),
 	.pc(pc_out),
+	.tag_hit(tag_hit),
+	.ways(ways),
+	.target_pc(pc_tar),
+	.br_prediction(taken_prediction),
 	
 	.ipacket(packet)
 );

@@ -1,3 +1,5 @@
+import lc3b_types::*;
+
 module pcmuxgen(
 	input [1:0] pcmux_sel,
 	input branch_enable,
@@ -7,10 +9,16 @@ module pcmuxgen(
 
 always_comb
 begin
-	if(branch_enable && opcode == 4'b0000)
-		wb_pc_mux_sel = 2'b10;
-	else
-		wb_pc_mux_sel = pcmux_sel;
+	wb_pc_mux_sel = 2'b00;
+	case(opcode)
+		op_br: begin
+			if(branch_enable)
+				wb_pc_mux_sel = pcmux_sel;
+		end
+		op_jmp: wb_pc_mux_sel = pcmux_sel;
+		op_jsr: wb_pc_mux_sel = pcmux_sel;
+		default: wb_pc_mux_sel = 2'b00;
+	endcase
 end
 
 endmodule : pcmuxgen

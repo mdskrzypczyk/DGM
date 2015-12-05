@@ -9,7 +9,8 @@ module lru
 	output logic lru_out
 );
 
-logic lru_bits[7:0];
+/* lru bits changed to 16 bits for increasing cache size */
+logic lru_bits[15:0];
 
 initial
 begin
