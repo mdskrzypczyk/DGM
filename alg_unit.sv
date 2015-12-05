@@ -46,7 +46,7 @@ begin
 			hi_bits = mul[31:16];
 			lo_bits = mul[15:0];
 		end
-		default : ;
+		default : done = 1'b1;
 	endcase
 	
 	if(cycle_count == 3'b000)

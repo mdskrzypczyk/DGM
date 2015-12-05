@@ -163,10 +163,7 @@ victim_cache the_executioner
 	.pmem_read(read),
 	.pmem_write(write),
 	.pmem_address(address),
-	.pmem_wdata(wdata),
-	
-	.read_miss_count(l2_read_miss_count),
-	.write_miss_count(l2_write_miss_count)
+	.pmem_wdata(wdata)
  );
 
 endmodule: DGM 

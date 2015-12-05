@@ -39,7 +39,7 @@ begin
 	ipacket.alu_res_sel = 4'b0000;
 	ipacket.load_alg_reg = 0;
 	ipacket.op_x_bits = 3'b000;
-	ipacket.br_res_sel = 2'b00;
+	ipacket.br_res_bits = 2'b00;
 	ipacket.pc_addr_sel = 2'b00;
 	
 	/* MEM */
@@ -67,7 +67,7 @@ begin
 			ipacket.load_regfile = 1'b1;
 			ipacket.forward = 1'b1;
 			ipacket.opA = 1'b1;
-			ipacket.br_res_sel = 2'b01;
+			ipacket.br_res_bits = 2'b01;
 			if(inst[5] == 1'b0)
 			begin
 				ipacket.opB = 1'b1;
@@ -82,7 +82,7 @@ begin
 			ipacket.load_regfile = 1'b1;
 			ipacket.forward = 1'b1;
 			ipacket.opA = 1'b1;
-			ipacket.br_res_sel = 2'b01;
+			ipacket.br_res_bits = 2'b01;
 			if(inst[5] == 1'b0)
 			begin
 				ipacket.opB = 1'b1;
@@ -127,7 +127,7 @@ begin
 			ipacket.mem_read = 1'b1;
 			ipacket.forward = 1'b1;
 			ipacket.opA = 1'b1;
-			ipacket.br_res_sel = 2'b11;
+			ipacket.br_res_bits = 2'b11;
 		end
 		
 		op_ldi : begin
@@ -139,7 +139,7 @@ begin
 			ipacket.mem_read = 1'b1;
 			ipacket.forward = 1'b1;
 			ipacket.opA = 1'b1;
-			ipacket.br_res_sel = 2'b11;
+			ipacket.br_res_bits = 2'b11;
 		end
 		
 		op_ldr : begin
@@ -151,7 +151,7 @@ begin
 			ipacket.mem_read = 1'b1;
 			ipacket.forward = 1'b1;
 			ipacket.opA = 1'b1;
-			ipacket.br_res_sel = 2'b11;
+			ipacket.br_res_bits = 2'b11;
 		end
 		
 		op_lea : begin
@@ -160,7 +160,7 @@ begin
 			ipacket.cc_mux_sel = 2'b10;
 			ipacket.load_cc = 1'b1;
 			ipacket.forward = 1'b1;
-			ipacket.br_res_sel = 2'b01;
+			ipacket.br_res_bits = 2'b01;
 		end
 		
 		op_not : begin
@@ -177,7 +177,7 @@ begin
 				3'b010: ipacket.aluop = alu_xnor;
 				default : ;
 			endcase
-			ipacket.br_res_sel = 2'b01;
+			ipacket.br_res_bits = 2'b01;
 		end
 		
 		op_shf : begin
@@ -187,7 +187,7 @@ begin
 			ipacket.alumux_sel = 1'b1;
 			ipacket.forward = 1'b1;
 			ipacket.opA = 1'b1;
-			ipacket.br_res_sel = 2'b01;
+			ipacket.br_res_bits = 2'b01;
 			case(inst[5:4])
 				2'b00 :
 					ipacket.aluop = alu_sll;
@@ -208,7 +208,6 @@ begin
 			ipacket.datamux_sel = 1'b1;
 			ipacket.sr2_mux_sel = 1'b1;
 			ipacket.opA = 1'b1;
-		
 		end
 		op_sti : begin
 			ipacket.alumux_sel = 1'b1;
@@ -240,7 +239,7 @@ begin
 		   	ipacket.drmux_sel = 1'b1;	
 			ipacket.dr_sr = 3'b111;
 			ipacket.forward = 1'b1;
-			ipacket.br_res_sel = 2'b11;
+			ipacket.br_res_bits = 2'b11;
 		end
 		
 		op_x : begin
@@ -250,7 +249,7 @@ begin
 			ipacket.forward = 1'b1;
 			ipacket.opA = 1'b1;
 			ipacket.opB = 1'b1;
-			ipacket.br_res_sel = 2'b01;
+			ipacket.br_res_bits = 2'b01;
 			case(inst[5:3])
 				op_sub : ipacket.aluop = alu_sub;
 				op_or : ipacket.aluop = alu_or;

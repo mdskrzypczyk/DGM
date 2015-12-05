@@ -165,7 +165,7 @@ exe_stage IE(
 	.l1d_read_miss(l1d_read_miss_count),
 	.l1d_write_miss(l1d_write_miss_count),
 	.l2_read_miss(l2_read_miss_count),
-	.l2_write_miss(l2_write_miss_count)
+	.l2_write_miss(l2_write_miss_count),
 
 	/* Branch Res Stuff */
 	.mem_ipacket(ie_mem_ipacket),

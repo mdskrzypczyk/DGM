@@ -99,7 +99,7 @@ typedef struct packed {
 	logic [3:0] alu_res_sel;
 	logic load_alg_reg;
 	logic [2:0] op_x_bits;
-	logic [1:0] br_res_sel;
+	logic [1:0] br_res_bits;
 	logic [1:0] pc_addr_sel;
 	
 	/* MEM */

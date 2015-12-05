@@ -37,12 +37,15 @@ gencc mem_cc_gen(
 
 ex_branch_cc cc_module(
 	.clk(clk),
-	.res_sel(ex_ipacket.res_sel),
+	.mem_opcode(mem_ipacket.opcode),
+	.ex_res_bits(ex_ipacket.br_res_bits),
+	.mem_res_bits(mem_ipacket.br_res_bits),
+	//.res_sel(ex_ipacket.res_sel),
 	.ex_alu_nzp(ex_alu_nzp),
 	.ex_addr_nzp(ex_addr_nzp),
 	.mem_nzp(mem_nzp),
-	.ex_res(ex_ipacket.ex_res),
-	.mem_res(mem_ipacket.mem_res),
+	//.ex_res(ex_ipacket.ex_res),
+	//.mem_res(mem_ipacket.mem_res),
 	.cc(cc)
 );
 
