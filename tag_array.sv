@@ -20,8 +20,8 @@ begin
 	for(int i = 0; i < $size(tag0); i++)
 	begin
 
-		tag0[i] = 8'b0;
-		tag1[i] = 8'b0;
+		tag0[i] = 7'b0;
+		tag1[i] = 7'b0;
 	end
 end
 

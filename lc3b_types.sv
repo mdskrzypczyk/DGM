@@ -11,11 +11,11 @@ typedef logic  [3:0] lc3b_imm4;
 typedef logic  [7:0] lc3b_vect8;
 
 //types for cache 
-typedef logic [127:0]lc3b_burst;
-typedef logic [7:0] lc3b_tag; 	//change the tag bit into 8 bits to increment the cache size
-typedef logic [6:0] lc3b_tag_l2; //the level 2 cache tag only have 7 bits 
+typedef logic [255:0]lc3b_burst;
+typedef logic [6:0] lc3b_tag; 	//change the tag bit into 7 bits to increment the cache size
+typedef logic [5:0] lc3b_tag_l2; //the level 2 cache tag only have 6 bits 
 
-typedef logic  [3:0]  lc3b_cache_offset;
+typedef logic  [4:0]  lc3b_cache_offset;
 typedef logic  [3:0]  lc3b_set;	//change the set bit into 4 bits to cover total of 16 sets in the cache
 typedef logic  [4:0]  lc3b_set_l2; //total of 5 bits to cover 32 sets in l2 cache
 typedef logic  [2:0] lc3b_reg;

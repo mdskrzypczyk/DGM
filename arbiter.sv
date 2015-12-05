@@ -50,11 +50,11 @@ always_comb
 	l2_read = 1'b0;
 	l2_write = 1'b0;
 	l2_address = 16'b0;
-	l2_wdata = 128'b0;
+	l2_wdata = 256'b0;
 	l2i_resp = 1'b0;
-	l2i_rdata = 128'b0;
+	l2i_rdata = 256'b0;
 	l2d_resp = 1'b0;
-	l2d_rdata = 128'b0;	
+	l2d_rdata = 256'b0;	
 	
 		/* first detecting which cache is trying to access L2 */
 		if(((IF_read == 1) || (IF_write == 1)) && (MEM_read == 0) && (MEM_write == 0))

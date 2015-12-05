@@ -56,7 +56,7 @@ data_array_l2 DATA_l2
 	.tag1_hit(tag1_hit),
 	.lru(lru_out),
 	.in(cache_mux_out),
-	.set(mem_address[8:4]),
+	.set(mem_address[9:5]),
 	.cache_out1(cache_out1),
 	.cache_out2(cache_out2)
 );
@@ -78,7 +78,7 @@ replace_word_l2 DATA_REPLACE_l2
 	.out(cache_wdata)
 );*/
 
-mux2 #(.width(128)) CACHE_IN_MUX_l2
+mux2 #(.width(256)) CACHE_IN_MUX_l2
 (
 	.sel(cache_in_sel),
 	.a(pmem_rdata),
@@ -92,7 +92,7 @@ lru_l2 LRU_l2
 	.load(load_lru),
 	.tag0_hit(tag0_hit),
 	.tag1_hit(tag1_hit),
-	.set(mem_address[8:4]),
+	.set(mem_address[9:5]),
 	.lru_out(lru_out)
 );
 
@@ -114,7 +114,7 @@ twobitarray_l2 VALID_BITS_l2
 	.lru(lru_out),
 	.tag0_hit(tag0_hit),
 	.tag1_hit(tag1_hit),
-	.set(mem_address[8:4]),
+	.set(mem_address[9:5]),
 	.outbit0(valid_bit0),
 	.outbit1(valid_bit1)
 );
@@ -136,7 +136,7 @@ twobitarray_l2 DIRTY_BITS_l2
 	.lru(lru_out),
 	.tag0_hit(tag0_hit),
 	.tag1_hit(tag1_hit),
-	.set(mem_address[8:4]),
+	.set(mem_address[9:5]),
 	.outbit0(dirty_bit0),
 	.outbit1(dirty_bit1)
 );
@@ -144,7 +144,7 @@ twobitarray_l2 DIRTY_BITS_l2
 /* Tag Array */
 tag_comp_l2 TAG_COMP_l2
 (
-	.tag(mem_address[15:9]),
+	.tag(mem_address[15:10]),
 	.tag0(tag0),
 	.tag1(tag1),
 	.tag_hit(tag_hit),
@@ -157,8 +157,8 @@ tag_array_l2 TAG_ARRAY_l2
 	.clk(clk),
 	.load(load_tag),
 	.lru(lru_out),
-	.tag(mem_address[15:9]),
-	.set(mem_address[8:4]),
+	.tag(mem_address[15:10]),
+	.set(mem_address[9:5]),
 	.tag_out0(tag0),
 	.tag_out1(tag1)
 );
@@ -170,7 +170,7 @@ addrgen_l2 PMEM_GEN_l2
 	.mem_address(mem_address),
 	.tag0(tag0),
 	.tag1(tag1),
-	.set(mem_address[8:4]),
+	.set(mem_address[9:5]),
 	.addrgen_out(pmem_address)
 );
 

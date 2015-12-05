@@ -20,9 +20,9 @@ begin
 	else
 	begin
 		if (lru == 0)
-			addrgen_out = {tag0, set, 4'b0};
+			addrgen_out = {tag0, set, 5'b0};
 		else
-			addrgen_out = {tag1, set, 4'b0};
+			addrgen_out = {tag1, set, 5'b0};
 	end
 end
 

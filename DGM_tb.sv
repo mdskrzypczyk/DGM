@@ -25,11 +25,11 @@ logic [15:0] b_mem_wdata;
 */
 
 logic resp;
-logic [127:0] rdata;
+logic [255:0] rdata;
 logic read;
 logic write;
 logic [15:0] address;
-logic [127:0] wdata;
+logic [255:0] wdata;
 
 
 /* Clock generator */

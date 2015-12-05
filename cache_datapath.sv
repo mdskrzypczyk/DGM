@@ -56,14 +56,14 @@ data_array DATA
 	.tag1_hit(tag1_hit),
 	.lru(lru_out),
 	.in(cache_mux_out),
-	.set(mem_address[7:4]),
+	.set(mem_address[8:5]),
 	.cache_out1(cache_out1),
 	.cache_out2(cache_out2)
 );
 
 wordselect DATASElECT
 (
-	.offset(mem_address[3:0]),
+	.offset(mem_address[4:0]),
 	.data_burst(cache_out),
 	.out(mem_rdata)
 );
@@ -71,13 +71,13 @@ wordselect DATASElECT
 replace_word DATA_REPLACE
 (
 	.in(cache_out),
-	.offset(mem_address[3:0]),
+	.offset(mem_address[4:0]),
 	.new_data(mem_wdata),
 	.mem_byte_enable(mem_byte_enable),
 	.out(cache_wdata)
 );
 
-mux2 #(.width(128)) CACHE_IN_MUX
+mux2 #(.width(256)) CACHE_IN_MUX
 (
 	.sel(cache_in_sel),
 	.a(pmem_rdata),
@@ -91,7 +91,7 @@ lru LRU
 	.load(load_lru),
 	.tag0_hit(tag0_hit),
 	.tag1_hit(tag1_hit),
-	.set(mem_address[7:4]),
+	.set(mem_address[8:5]),
 	.lru_out(lru_out)
 );
 
@@ -113,7 +113,7 @@ twobitarray VALID_BITS
 	.lru(lru_out),
 	.tag0_hit(tag0_hit),
 	.tag1_hit(tag1_hit),
-	.set(mem_address[7:4]),
+	.set(mem_address[8:5]),
 	.outbit0(valid_bit0),
 	.outbit1(valid_bit1)
 );
@@ -135,7 +135,7 @@ twobitarray DIRTY_BITS
 	.lru(lru_out),
 	.tag0_hit(tag0_hit),
 	.tag1_hit(tag1_hit),
-	.set(mem_address[7:4]),
+	.set(mem_address[8:5]),
 	.outbit0(dirty_bit0),
 	.outbit1(dirty_bit1)
 );
@@ -143,7 +143,7 @@ twobitarray DIRTY_BITS
 /* Tag Array */
 tag_comp TAG_COMP
 (
-	.tag(mem_address[15:8]),
+	.tag(mem_address[15:9]),
 	.tag0(tag0),
 	.tag1(tag1),
 	.tag_hit(tag_hit),
@@ -156,8 +156,8 @@ tag_array TAG_ARRAY
 	.clk(clk),
 	.load(load_tag),
 	.lru(lru_out),
-	.tag(mem_address[15:8]),
-	.set(mem_address[7:4]),
+	.tag(mem_address[15:9]),
+	.set(mem_address[8:5]),
 	.tag_out0(tag0),
 	.tag_out1(tag1)
 );
@@ -169,7 +169,7 @@ addrgen PMEM_GEN
 	.mem_address(mem_address),
 	.tag0(tag0),
 	.tag1(tag1),
-	.set(mem_address[7:4]),
+	.set(mem_address[8:5]),
 	.addrgen_out(pmem_address)
 );
 

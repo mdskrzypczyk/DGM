@@ -20,8 +20,8 @@ initial
 begin
 	for (int i = 0; i < $size(way0); i++)
 	begin
-		way0[i] = 128'b0;
-		way1[i] = 128'b0;
+		way0[i] = 256'b0;
+		way1[i] = 256'b0;
 	end
 end
 

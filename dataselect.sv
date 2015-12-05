@@ -11,7 +11,7 @@ module dataselect
 
 always_comb
 begin
-	out = 128'b0;
+	out = 256'b0;
 	if(sel0 == 1)
 		out = data0;
 	else if (sel1 == 1)
