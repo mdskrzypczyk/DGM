@@ -77,6 +77,10 @@ typedef struct packed {
 	lc3b_aluop aluop;
 	logic [1:0] braddmux_sel;
 	logic alumux_sel;
+	logic ex_res;
+	logic res_sel;
+	logic mem_res;
+	logic [1:0] pc_addr_sel;
 	
 	/* MEM */
 	logic wdatamux_sel;

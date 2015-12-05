@@ -6,44 +6,43 @@ module WB(
 	input lc3b_word mem_in, alu_in,
 	input lc3b_word br_addr,
 	input lc3b_ipacket ipacket, 
-	input logic stall,
+	//input logic stall,
 	
 	/* data output */
-	output lc3b_word br_addr_out,
+	//output lc3b_word br_addr_out,
 	output lc3b_word wbpc,
 	output lc3b_reg wbdr,
 	output logic wbdrmux_sel,
-	output logic[1:0] pcmux_sel,
+	//output logic[1:0] pcmux_sel,
 	output lc3b_word wbdata,
 	output logic regfile_mux_sel,
 
-	output logic load_regfile,
+	output logic load_regfile
 	
 	//somthing new added here
-	output logic br_sig,
+	//output logic br_sig,
 	
-	output logic pip_flush
+	//output logic pip_flush
 );
 
 /* internal signals */
-lc3b_nzp cc_out, gen_out;
-logic br_taken;
+//lc3b_nzp cc_out, gen_out;
+//logic br_taken;
 
 assign regfile_mux_sel = ipacket.regfile_mux_sel;
 assign load_regfile = ipacket.load_regfile;
-assign br_addr_out = br_addr;
+//assign br_addr_out = br_addr;
 assign wbpc = ipacket.pc;
 assign wbdr = ipacket.dr_sr;
 assign wbdrmux_sel = ipacket.drmux_sel;
 
-
-assign br_sig = br_taken;
-
 /* GenCC module */
+/*
 gencc genccmodule(
 	.in(wbdata),
 	.out(gen_out)
 );
+*/
 
 mux4 #(.width(16)) cc_mux
 (
@@ -55,6 +54,7 @@ mux4 #(.width(16)) cc_mux
 	.f(wbdata)
 );
 
+/*
 register #(.width(3)) cc 
 (
 	.clk(clk),
@@ -85,5 +85,5 @@ pcmuxgen pcmuxselgen(
 	.wb_pc_mux_sel(pcmux_sel)
 );
 
-
+*/
 endmodule : WB
