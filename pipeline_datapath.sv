@@ -18,7 +18,9 @@ module pipeline_datapath(
 	input lc3b_word mem_mem_rdata,
 	output logic mem_memread,
 	output lc3b_word mem_mem_wdata,
-	output logic mem_memwrite
+	output logic mem_memwrite,
+	
+	input lc3b_word l1i_read_miss_count, l1i_write_miss_count, l1d_read_miss_count, l1d_write_miss_count, l2_read_miss_count, l2_write_miss_count
 );
 
 /* Internal signals */
@@ -42,6 +44,8 @@ logic[1:0] ex_pcmux_sel;
 lc3b_word ie_sr1_in, ie_sr2_in,ie_sext_in;
 lc3b_word ie_alu_out, ie_addrgen_out;
 lc3b_word ie_sr_store;
+lc3b_word bubble_count;
+logic alg_done;
 
 /* MEM signals */
 lc3b_word mem_alu_in, mem_addrgen_in;
@@ -150,10 +154,19 @@ exe_stage IE(
 	.mem_data_forward(mem_data_forward),
 	.wb_data_forward(wb_data_forward),
 	
+	.alg_done(alg_done),
 	.alu_out(ie_alu_out),
 	.bradd_out(ie_addrgen_out),
 	.sr_store(ie_sr_store),
-	
+
+	.bubble_count(bubble_count),
+	.l1i_read_miss(l1i_read_miss_count),
+	.l1i_write_miss(l1i_write_miss_count),
+	.l1d_read_miss(l1d_read_miss_count),
+	.l1d_write_miss(l1d_write_miss_count),
+	.l2_read_miss(l2_read_miss_count),
+	.l2_write_miss(l2_write_miss_count),
+
 	/* Branch Res Stuff */
 	.mem_ipacket(ie_mem_ipacket),
 	.br_taken(br_taken),
@@ -247,6 +260,9 @@ hazard_detection hazard_detection_module
 	/* EX signal */
 	.br_taken(br_taken),
 	
+	/* Ex Signals */
+	.alg_done(alg_done),
+	
 	/* Mem signals */
 	.mem_mem_resp(mem_mem_resp),
 	.mem_memread(mem_memread),
@@ -291,6 +307,12 @@ forwarding_selector fowarding_selector
 	
 	.mem_out(mem_data_forward),
 	.wb_out(wb_data_forward)
+);
+
+stallcounter16 bubble_counter(
+	.clk(clk),
+	.stall(pc_stall),
+	.bubble_count(bubble_count)
 );
 
 endmodule : pipeline_datapath

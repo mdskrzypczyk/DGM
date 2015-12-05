@@ -54,7 +54,7 @@ always_comb
 				out = $signed({in[5:0], 1'b0}); //SEXT(PCoffset6) << 1
 			//TRAP vect8
 			4'b1111:
-				out = $signed({in[7:0], 1'b0}); //SEXT(PCoffset7) << 1
+				out = {7'b0,in[7:0], 1'b0}; //ZEXT(PCoffset7) << 1
 			default : ;
 		endcase 
 	
