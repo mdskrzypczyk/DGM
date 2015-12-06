@@ -22,13 +22,16 @@ begin
     end
 end
 
-always_ff @(posedge clk)
+//if timing constraints also could change to always latch
+always_ff @(negedge clk)
 begin
     if (load == 1)
     begin
         data[dest] = in;
     end
 end
+
+
 
 always_comb
 begin

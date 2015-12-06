@@ -4,6 +4,8 @@ module adder #(parameter width = 16)
 	output logic [width-1:0] out
 );
 
+//testing comment
+
 always_comb
 begin
 	out = a + b;
