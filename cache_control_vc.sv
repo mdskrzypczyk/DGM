@@ -105,11 +105,8 @@ begin: next_state_logic
 	case(state)
 	
 	s_idle : begin
-		//cache read
-		if(read == 1'b1)
-			next_state = s_pmem_read;
 		//swap, or cache hit
-		else if(swap == 1'b1 && write == 1'b1 )
+		if(swap == 1'b1 && write == 1'b1 )
 			next_state = s_write_swap1;
 		//write w/ no eviction
 		else if(swap ==1'b0 && write == 1'b1 && dirty == 1'b0)
@@ -117,6 +114,9 @@ begin: next_state_logic
 		//write w/ eviction
 		else if(swap ==1'b0 && write == 1'b1 && dirty == 1'b1)
 			next_state = s_pmem_write;
+		//cache read
+		else if(read == 1'b1)
+			next_state = s_pmem_read;
 		
 	end
 	

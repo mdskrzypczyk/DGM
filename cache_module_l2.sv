@@ -73,7 +73,7 @@ cache_datapath_l2 CACHE_DATAPATH_l2
 	.pmem_wdata(pmem_wdata)
 );
 
-cache_control CACHE_CONTROLLER_l2
+cache_control_l2 CACHE_CONTROLLER_l2
 (
 	.clk(clk),
 	.mem_write(mem_write),

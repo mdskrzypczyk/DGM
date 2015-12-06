@@ -166,4 +166,5 @@ victim_cache the_executioner
 	.pmem_address(address),
 	.pmem_wdata(wdata)
  );
+ 
 endmodule: DGM 
