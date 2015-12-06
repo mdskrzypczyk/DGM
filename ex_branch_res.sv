@@ -63,6 +63,7 @@ ex_branch_cc cc_module(
 cccomp CCComp(
 	.cc(cc),
 	.nzp(ex_ipacket.nzp),
+	.mem_nzp(mem_nzp),
 	.opcode(ex_ipacket.opcode),
 	.branch_enable(br_sig)
 );
