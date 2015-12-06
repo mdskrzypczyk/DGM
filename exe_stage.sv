@@ -168,7 +168,8 @@ ex_branch_res ex_branch_resolution(
 	.ex_addr_res(bradd_out),
 	.mem_res(mem_data_forward),
 	.branch_enable(br_sig),
-	.br_addr(pc_addr_out)
+	.br_addr(pc_addr_out),
+	.pcmux_sel(pcmux_sel)
 );
 
 flush_gen pipe_flush(
@@ -178,11 +179,5 @@ flush_gen pipe_flush(
 	.flush(pip_flush)
 );
 
-pcmuxgen pcmuxselgen(
-	.pcmux_sel(ipacket.pcmux_sel),
-	.opcode(ipacket.opcode),
-	.branch_enable(br_sig),
-	.wb_pc_mux_sel(pcmux_sel)
-);
 
 endmodule : exe_stage

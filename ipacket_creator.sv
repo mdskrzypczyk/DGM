@@ -239,7 +239,6 @@ begin
 		   	ipacket.drmux_sel = 1'b1;	
 			ipacket.dr_sr = 3'b111;
 			ipacket.forward = 1'b1;
-			ipacket.br_res_bits = 2'b11;
 		end
 		
 		op_x : begin

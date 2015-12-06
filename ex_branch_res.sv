@@ -6,18 +6,32 @@ module ex_branch_res(
 	input lc3b_word ex_alu_res, ex_addr_res, mem_res,
 	
 	output logic branch_enable,
-	output lc3b_word br_addr
+	output lc3b_word br_addr,
+	output logic [1:0] pcmux_sel
 );
 
 lc3b_nzp ex_alu_nzp, ex_addr_nzp, mem_nzp, cc;
+logic [1:0] pc_addr_sel;
+logic br_sig;
+
+assign branch_enable = br_sig;
 
 mux4 braddmux(
-	.sel(ex_ipacket.pc_addr_sel),
+	.sel(pc_addr_sel),
 	.a(ex_alu_res),
 	.b(ex_addr_res),
 	.c(mem_res),
 	.d(16'h0),
 	.f(br_addr)
+);
+
+
+pcmuxgen pcmuxselgen(
+	.branch_enable(br_sig),
+	.ex_ipacket(ex_ipacket),
+	.mem_ipacket(mem_ipacket),
+	.wb_pc_mux_sel(pcmux_sel),
+	.pc_addr_sel(pc_addr_sel)
 );
 
 gencc ex_alu_cc_gen(
@@ -40,12 +54,9 @@ ex_branch_cc cc_module(
 	.mem_opcode(mem_ipacket.opcode),
 	.ex_res_bits(ex_ipacket.br_res_bits),
 	.mem_res_bits(mem_ipacket.br_res_bits),
-	//.res_sel(ex_ipacket.res_sel),
 	.ex_alu_nzp(ex_alu_nzp),
 	.ex_addr_nzp(ex_addr_nzp),
 	.mem_nzp(mem_nzp),
-	//.ex_res(ex_ipacket.ex_res),
-	//.mem_res(mem_ipacket.mem_res),
 	.cc(cc)
 );
 
@@ -53,6 +64,6 @@ cccomp CCComp(
 	.cc(cc),
 	.nzp(ex_ipacket.nzp),
 	.opcode(ex_ipacket.opcode),
-	.branch_enable(branch_enable)
+	.branch_enable(br_sig)
 );
 endmodule : ex_branch_res

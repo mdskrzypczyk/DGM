@@ -80,7 +80,7 @@ begin
 	end
 	
    op_trap : begin
-		mem_out = mem_packet.pc;
+		mem_out = mem_rdata;
 	end
 	
 	default : begin

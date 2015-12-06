@@ -42,7 +42,7 @@ always_comb
 				out = $signed({in[8:0], 1'b0}); //SEXT(PCoffset9) << 1
 			//SHF imm4
 			4'b1101:
-				out = $signed({in[3:0]});  //SEXT(imm4)
+				out = {12'b0,{in[3:0]}};  //SEXT(imm4)
 			//STB off6
 			4'b0011:
 				out = $signed({in[5:0]});  //SEXT(offset6)
