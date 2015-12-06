@@ -101,12 +101,15 @@ begin
 		end
 		
 		op_br: begin 
-			ipacket.nzp = inst[11:9];
-			ipacket.pc_addr_sel = 2'b01;
-			ipacket.pcmux_sel = 2'b10;
-			ipacket.branch = 1'b1;
-			if(tag_hit)
-				ipacket.btb_miss = 0;
+			if(inst != 16'b0)
+			begin 
+				ipacket.nzp = inst[11:9];
+				ipacket.pc_addr_sel = 2'b01;
+				ipacket.pcmux_sel = 2'b10;
+				ipacket.branch = 1'b1;
+				if(tag_hit)
+					ipacket.btb_miss = 0;
+			end
 		end 
 		
 		op_jmp : begin

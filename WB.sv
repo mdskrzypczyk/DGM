@@ -87,5 +87,5 @@ pcmuxgen pcmuxselgen(
 	.wb_pc_mux_sel(pcmux_sel)
 );*/
 
-*/
+
 endmodule : WB

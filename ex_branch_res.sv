@@ -64,6 +64,7 @@ cccomp CCComp(
 	.cc(cc),
 	.nzp(ex_ipacket.nzp),
 	.mem_nzp(mem_nzp),
+	.mem_res_bits(mem_ipacket.br_res_bits),
 	.opcode(ex_ipacket.opcode),
 	.branch_enable(br_sig)
 );

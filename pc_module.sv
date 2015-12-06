@@ -13,6 +13,7 @@ import lc3b_types::*;
 	input lc3b_word pc_predict, 
 	input lc3b_word flush_pc, 
 	input logic prediction_taken,
+	input logic if_branch, ex_branch,
 	input logic load, flush, br_sig, 
 	
 	output lc3b_word out 	
@@ -30,9 +31,9 @@ import lc3b_types::*;
  begin 
 		if(load) //case loading 
 			begin 
-				if(prediction_taken && !flush )	//case when predict taking a branch 
+				if(prediction_taken && flush  == 1'b0 &&  if_branch)	//case when predict taking a branch 
 					pc_value = pc_predict;
-				else if(flush) //case when performing a flush 
+				else if(flush && ex_branch) //case when performing a flush 
 					case(br_sig) 
 						1'b1: //case it is taken 
 							pc_value = pcmux_out;

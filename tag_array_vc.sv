@@ -21,10 +21,10 @@ lc3b_tag_vc tag_D;
 /* Setup */
 initial
 begin
-		tag_A = 11'b0;
-		tag_B = 11'b0;
-		tag_C = 11'b0;
-		tag_D = 11'b0;
+		tag_A = 12'b0;
+		tag_B = 12'b0;
+		tag_C = 12'b0;
+		tag_D = 12'b0;
 end
 
 /*Loading logic*/

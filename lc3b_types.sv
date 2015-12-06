@@ -14,7 +14,7 @@ typedef logic  [7:0] lc3b_vect8;
 typedef logic [127:0]lc3b_burst;
 typedef logic [7:0] lc3b_tag; 	//change the tag bit into 8 bits to increment the cache size
 typedef logic [6:0] lc3b_tag_l2; //the level 2 cache tag only have 7 bits 
-typedef logic [9:0] lc3b_pc_tag; //the tag bits for pc, total of 
+typedef logic [11:0] lc3b_pc_tag; //the tag bits for pc, total of 
 typedef logic [1:0] lc3b_pc_ways; //the pc set index 2 bits for 4 way 
 
 typedef logic  [3:0]  lc3b_cache_offset;

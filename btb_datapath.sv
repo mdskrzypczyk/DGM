@@ -56,7 +56,7 @@ import lc3b_types::*;
 	.load(load_tag),
 	.pc_load(pc_load_out), // the pc tag for loading, from resolved stage 
 	.load_set(pc_load_set_out), //the set from pc in resovled stage 
-	.read_set(pc_in[5:2]), // the set from pc in IF stage 
+	.read_set(pc_in[3:0]), // the set from pc in IF stage 
 	.btb_lru(btb_lru),
 	.pc_out0(pc_out0),
 	.pc_out1(pc_out1),
@@ -68,7 +68,7 @@ import lc3b_types::*;
  
  /* btb compare module, which compare the 4 tags for pc */
  btb_comp BTB_COMP(
-	.tag(pc_in[15:6]),
+	.tag(pc_in[15:4]),
 	.tag0(pc_out0),
 	.tag1(pc_out1),
 	.tag2(pc_out2),
@@ -97,7 +97,7 @@ import lc3b_types::*;
 	.in(pc_target_out),
 	.btb_lru(btb_lru),
 	.load_set(pc_load_set_out), //the set from pc in resovled stage 
-	.read_set(pc_in[5:2]), // the set from pc in IF stage 
+	.read_set(pc_in[3:0]), // the set from pc in IF stage 
 	.target0_pc(target0_pc),
 	.target1_pc(target1_pc),
 	.target2_pc(target2_pc),
@@ -123,8 +123,8 @@ import lc3b_types::*;
 	.clk(clk),
 	.load(load_btb),
 	.clear(clear_target_holder),
-	.pc_load(ipacket_in.pc[15:6]), //holding for pc tag
-	.pc_load_set(ipacket_in.pc[5:2]), //holding for pc set 
+	.pc_load(ipacket_in.pc[15:4]), //holding for pc tag
+	.pc_load_set(ipacket_in.pc[3:0]), //holding for pc set 
 	.pc_target(pc_target),	//holding for pc target 
 	
 	.pc_load_out(pc_load_out),
@@ -141,7 +141,7 @@ import lc3b_types::*;
 	.clear(clear_valid),
 	.btb_lru(btb_lru),
 	.load_set(pc_load_set_out), //the set from pc in resovled stage 
-	.read_set(pc_in[5:2]), // the set from pc in IF stage 
+	.read_set(pc_in[3:0]), // the set from pc in IF stage 
 	.outbit0(valid0),
 	.outbit1(valid1),
 	.outbit2(valid2),
@@ -158,7 +158,7 @@ import lc3b_types::*;
 	.tag2_hit(tag2_hit),
 	.tag3_hit(tag3_hit),
 	.store(lru_store),
-	.set(pc_in[5:2]),
+	.set(pc_in[3:0]),
 	.btb_lru_out(btb_lru) //btb lru only used in the loading situation. 
  );
  
@@ -176,8 +176,8 @@ import lc3b_types::*;
 	.clear(clear_bht),
 	.br_result(br_result),
 	.btb_lru(btb_lru), //ways offset when loading and miss 
-	.load_set(ipacket_in.pc[5:2]), //loading happens in the resolving stage 
-	.read_set(pc_in[5:2]), //rading happens in the IF stage 
+	.load_set(ipacket_in.pc[3:0]), //loading happens in the resolving stage 
+	.read_set(pc_in[3:0]), //rading happens in the IF stage 
 	.ways(ipacket_in.ways),	//ways offset when loading and hit 
 	
 	.br0(br0),

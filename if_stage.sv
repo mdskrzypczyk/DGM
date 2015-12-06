@@ -66,6 +66,8 @@ pc_module PC_MODULE(
 	.load(~pc_stall),
 	.pcmux_out(pcmux_out),
 	.pc_predict(pc_tar),
+	.if_branch(packet.branch),
+	.ex_branch(br_packet.branch),
 	.flush_pc(flush_pc),
 	.br_sig(br_taken),
 	.flush(flush),

@@ -4,7 +4,7 @@ module exe_stage
 (
 	input clk,
 	input stall,
-	input lc3b_ipacket ipacket,
+	input lc3b_ipacket ex_ipacket,
 	input lc3b_ipacket mem_ipacket,
 	input lc3b_word SEXT,
 	input lc3b_word sr1,
@@ -59,7 +59,7 @@ alg_unit algebra(
 	.clk(clk),
 	.opA(opA),
 	.opB(opB),
-	.op_x_bits(ipacket.op_x_bits),
+	.op_x_bits(ex_ipacket.op_x_bits),
 	
 	.done(alg_done),
 	.hi_bits(alg_hi_in),
@@ -68,14 +68,14 @@ alg_unit algebra(
 
 register alg_hi_reg(
 	.clk(clk),
-	.load(ipacket.load_alg_reg),
+	.load(ex_ipacket.load_alg_reg),
 	.in(alg_hi_in),
 	.out(alg_hi_bits)
 );
 
 register alg_lo_reg(
 	.clk(clk),
-	.load(ipacket.load_alg_reg),
+	.load(ex_ipacket.load_alg_reg),
 	.in(alg_lo_in),
 	.out(alg_lo_bits)
 );
@@ -90,7 +90,7 @@ alu alu
 );
 
 mux16 alu_res_mux(
-	.sel(ipacket.alu_res_sel),
+	.sel(ex_ipacket.alu_res_sel),
 	.a(alu_res),
 	.b(bubble_count),
 	.c(l1i_read_miss),
@@ -160,7 +160,7 @@ mux4 #(.width(16)) opSrmux
 /* Branch Resolution */
 ex_branch_res ex_branch_resolution(
 	.clk(clk),
-	.ex_ipacket(ipacket),
+	.ex_ipacket(ex_ipacket),
 	.mem_ipacket(mem_ipacket),
 	.ex_alu_res(alu_out),
 	.ex_addr_res(bradd_out),
@@ -171,8 +171,10 @@ ex_branch_res ex_branch_resolution(
 );
 
 flush_gen pipe_flush(
-	.opcode(ipacket.opcode),
+	.opcode(ex_ipacket.opcode),
 	.branch_enable(br_sig),
+	.mem_opcode(mem_ipacket.opcode),
+	.packet_in(ex_ipacket),
 	.stall(stall),
 	.flush(pip_flush)
 );

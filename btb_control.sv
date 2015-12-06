@@ -50,8 +50,8 @@
 				load_tag = 1'b1;
 				load_target = 1'b1;
 				load_valid = 1'b1;
-				//load_lru = 1'b1;
-				//lru_store = 1'b1;
+				load_lru = 1'b1;
+				lru_store = 1'b1;
 				clear_target_holder= 1'b1;
 			end 
 	endcase

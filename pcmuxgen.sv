@@ -14,7 +14,7 @@ begin
 	pc_addr_sel = 2'b00;
 	case(ex_ipacket.opcode)
 		op_br: begin
-			if(branch_enable)
+			if(branch_enable && ex_ipacket.br_prediction == 1'b0)
 			begin
 				wb_pc_mux_sel = ex_ipacket.pcmux_sel;
 				pc_addr_sel = ex_ipacket.pc_addr_sel;

@@ -132,13 +132,23 @@ cache cache_money(
 	.mem_resp(l2_resp),
 	.mem_rdata(l2_rdata),
 	
+	/*
+		.pmem_resp(resp),
+	.pmem_rdata(rdata),
+	.pmem_read(read),
+	.pmem_write(write),
+	.pmem_address(address),
+	.pmem_wdata(wdata)
+	*/
 	// signal connecting to Physical or victim cache
+	
 	.pmem_resp(vc_resp),
 	.pmem_rdata(vc_rdata),
 	.pmem_read(vc_read),
 	.pmem_write(vc_write),
 	.pmem_address(vc_address),
 	.pmem_wdata(vc_wdata)
+ 
  );
 
  /* Victim Cache */

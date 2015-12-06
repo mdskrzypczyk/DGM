@@ -63,7 +63,7 @@ tag_array_vc tag_array
 	.clk(clk),
 	.load(load_entry),
 	.way(waymux_out),
-	.tag_in(l2_address[15:4]),
+	.tag_in(l2_tag),
 	
 	.tag_out_A(tag_out_A),
 	.tag_out_B(tag_out_B),
@@ -191,7 +191,7 @@ mux2 #(.width(16)) pmem_addressmux
 (
 	.sel(pmem_addressmux_sel),
 	.a(l2_address), 
-	.b({tagmux_out , l2_offset}),
+	.b({tagmux_out , 4'b0}),
 	
 	.f(pmem_address)
 );

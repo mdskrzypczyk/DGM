@@ -93,14 +93,12 @@ if_stage if_module(
 	.ways(ways), //ways offset when btb hit 
 	.pc_tar(pc_tar), //target pc address 
 	.taken_prediction(taken_prediction), //branch prediction bit 
-	.br_packet(if_id_ipacket),
+	.br_packet(id_ie_ipacket),
+	
 	.flush(flush),
 	.flush_pc(id_ie_ipacket.pc),
 	.br_taken(br_taken),
-	
-	.pcmux_sel(ex_pcmux_sel),
-	.pc_stall(pc_stall),
-	
+		
 	/* memory signals */
 	.if_memaddr(if_memaddr),
 	.if_mem_byte_enable(if_mem_byte_enable),
@@ -166,7 +164,7 @@ id_exe_meat ID_EXE(
 exe_stage IE(
 	.clk(clk),
 	.stall(id_ie_stall),
-	.ipacket(id_ie_ipacket),
+	.ex_ipacket(id_ie_ipacket),
 	.SEXT(ie_sext_in),
 	.sr1(ie_sr1_in),
 	.sr2(ie_sr2_in),
@@ -343,7 +341,7 @@ BTB btb_module(
 	.pc_in(if_pc),	//pc value from IF stage, use for check BTB 
 	.ipacket_in(id_ie_ipacket),	//ipacket from WB stage, used for store back 
 	.if_packet_in(if_ipacket),
-	.pc_target(pc_addr_out),	//target jumping pc from WB stage 
+	.pc_target(ie_addrgen_out),	//target jumping pc from WB stage 
 	.branch_resolve(br_taken),	//branch resolve bit, check if miss predict 
 	
 	.stall(btb_stall), //the btb_stall logic 
