@@ -63,7 +63,7 @@ tag_array_vc tag_array
 	.clk(clk),
 	.load(load_entry),
 	.way(waymux_out),
-	.tag_in(),
+	.tag_in(l2_address[15:4]),
 	
 	.tag_out_A(tag_out_A),
 	.tag_out_B(tag_out_B),

@@ -9,7 +9,7 @@ module DGM(
  output lc3b_word address,
  output logic read,
  output logic write,
- input lc3b_burst wdata
+ output lc3b_burst wdata
 	
 );
 
@@ -131,6 +131,7 @@ cache cache_money(
 	.mem_byte_enable(2'b11), //byte enable manually set as reading entire thing, should not matter here
 	.mem_resp(l2_resp),
 	.mem_rdata(l2_rdata),
+	
 	// signal connecting to Physical or victim cache
 	.pmem_resp(vc_resp),
 	.pmem_rdata(vc_rdata),
@@ -165,5 +166,4 @@ victim_cache the_executioner
 	.pmem_address(address),
 	.pmem_wdata(wdata)
  );
-
 endmodule: DGM 
