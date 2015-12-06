@@ -9,8 +9,7 @@ module DGM(
  output lc3b_word address,
  output logic read,
  output logic write,
- input lc3b_burst wdata				
-
+ output lc3b_burst wdata
 	
 );
 
@@ -24,7 +23,10 @@ lc3b_burst l2i_rdata,IF_wdata, l2d_rdata, MEM_wdata ;
 logic l2_read, l2_write, l2_resp;
 lc3b_word l2_address; 
 lc3b_burst l2_wdata, l2_rdata;
-
+lc3b_word l1i_read_miss_count, l1i_write_miss_count, l1d_read_miss_count, l1d_write_miss_count, l2_read_miss_count, l2_write_miss_count;
+logic vc_read, vc_write, vc_resp;
+lc3b_word vc_address;
+lc3b_burst vc_wdata, vc_rdata;
 
 pipeline_datapath the_pip(
 	 .clk(clk),
@@ -42,8 +44,14 @@ pipeline_datapath the_pip(
 	  .mem_mem_rdata(mem_mem_rdata),
 	  .mem_memread(mem_memread),
 	  .mem_mem_wdata(mem_mem_wdata),
-	  .mem_memwrite(mem_memwrite)
+	  .mem_memwrite(mem_memwrite),
 
+	  .l1i_read_miss_count(l1i_read_miss_count),
+	  .l1i_write_miss_count(l1i_write_miss_count),
+	  .l1d_read_miss_count(l1d_read_miss_count),
+	  .l1d_write_miss_count(l1d_write_miss_count),
+	  .l2_read_miss_count(l2_read_miss_count),
+	  .l2_write_miss_count(l2_write_miss_count)
 );
 
 cache cache_money(
@@ -76,8 +84,12 @@ cache cache_money(
 	.MEM_address(MEM_address),
 	.MEM_wdata(MEM_wdata),
 	.MEM_read(MEM_read),
-	.MEM_write(MEM_write)
+	.MEM_write(MEM_write),
 
+	.l1i_read_miss_count(l1i_read_miss_count),
+	.l1i_write_miss_count(l1i_write_miss_count),
+	.l1d_read_miss_count(l1d_read_miss_count),
+	.l1d_write_miss_count(l1d_write_miss_count)
 );
 
 
@@ -119,18 +131,40 @@ cache cache_money(
 	.mem_byte_enable(2'b11), //byte enable manually set as reading entire thing, should not matter here
 	.mem_resp(l2_resp),
 	.mem_rdata(l2_rdata),
-	// signal connecting to Physical 
+	
+	// signal connecting to Physical or victim cache
+	.pmem_resp(vc_resp),
+	.pmem_rdata(vc_rdata),
+	.pmem_read(vc_read),
+	.pmem_write(vc_write),
+	.pmem_address(vc_address),
+	.pmem_wdata(vc_wdata)
+ );
+
+ /* Victim Cache */
+victim_cache the_executioner
+(
+	//Inputs
+   .clk(clk),
+	
+	.arbiter_address(l2_address),
+	
+	.read(vc_read),
+   .write(vc_write),
+   .address(vc_address),
+   .wdata(vc_wdata),
+	
 	.pmem_resp(resp),
 	.pmem_rdata(rdata),
+	
+	//Outputs
+	.resp(vc_resp),
+   .rdata(vc_rdata),
+	
 	.pmem_read(read),
 	.pmem_write(write),
 	.pmem_address(address),
 	.pmem_wdata(wdata)
  );
-
-
-
-
-
-
+ 
 endmodule: DGM 

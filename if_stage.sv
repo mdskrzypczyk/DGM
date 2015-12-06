@@ -39,6 +39,7 @@ lc3b_word pcmux_out, pc_out,  plus2_out;
 logic load_pc;
 
 assign if_pc = pcmux_out;
+
  
 
 /* PC PLUS 2 UNIT */
@@ -72,6 +73,7 @@ pc_module PC_MODULE(
 	
 	.out(pc_out)
 );
+
 
 /* Ipacket Generator */
 ipacket_creator ipacket_creator 

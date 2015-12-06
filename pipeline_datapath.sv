@@ -18,7 +18,9 @@ module pipeline_datapath(
 	input lc3b_word mem_mem_rdata,
 	output logic mem_memread,
 	output lc3b_word mem_mem_wdata,
-	output logic mem_memwrite
+	output logic mem_memwrite,
+	
+	input lc3b_word l1i_read_miss_count, l1i_write_miss_count, l1d_read_miss_count, l1d_write_miss_count, l2_read_miss_count, l2_write_miss_count
 );
 
 /* Internal signals */
@@ -42,6 +44,8 @@ logic[1:0] ex_pcmux_sel;
 lc3b_word ie_sr1_in, ie_sr2_in,ie_sext_in;
 lc3b_word ie_alu_out, ie_addrgen_out;
 lc3b_word ie_sr_store;
+lc3b_word bubble_count;
+logic alg_done;
 
 /* MEM signals */
 lc3b_word mem_alu_in, mem_addrgen_in;
@@ -94,6 +98,8 @@ if_stage if_module(
 	.flush_pc(id_ie_ipacket.pc),
 	.br_taken(br_taken),
 	
+	.pcmux_sel(ex_pcmux_sel),
+	.pc_stall(pc_stall),
 	
 	/* memory signals */
 	.if_memaddr(if_memaddr),
@@ -160,7 +166,7 @@ id_exe_meat ID_EXE(
 exe_stage IE(
 	.clk(clk),
 	.stall(id_ie_stall),
-	.ex_ipacket(id_ie_ipacket),
+	.ipacket(id_ie_ipacket),
 	.SEXT(ie_sext_in),
 	.sr1(ie_sr1_in),
 	.sr2(ie_sr2_in),
@@ -170,10 +176,21 @@ exe_stage IE(
 	.mem_data_forward(mem_data_forward),
 	.wb_data_forward(wb_data_forward),
 	
+	.alg_done(alg_done),
 	.alu_out(ie_alu_out),
 	.bradd_out(ie_addrgen_out),
 	.sr_store(ie_sr_store),
-	
+
+
+	.bubble_count(bubble_count),
+	.l1i_read_miss(l1i_read_miss_count),
+	.l1i_write_miss(l1i_write_miss_count),
+	.l1d_read_miss(l1d_read_miss_count),
+	.l1d_write_miss(l1d_write_miss_count),
+	.l2_read_miss(l2_read_miss_count),
+	.l2_write_miss(l2_write_miss_count),
+
+
 	/* Branch Res Stuff */
 	.mem_ipacket(ie_mem_ipacket),
 	.br_taken(br_taken),
@@ -186,7 +203,9 @@ exe_stage IE(
 ie_mem_meat IE_MEM(
 	.clk(clk),
 	.load_addr(1'b0),		//FIXo
+
 	.stall((ie_mem_stall || btb_stall)),
+
 	.in_ipacket(id_ie_ipacket),
 	.ie_alu_res(ie_alu_out),
 	.ie_addrgen_res(ie_addrgen_out),
@@ -224,7 +243,9 @@ mem_stage MEM(
 //MEM/WB MEAT
 mem_wb_meat MEM_WB(
 	.clk(clk),
+
 	.stall((mem_wb_stall || btb_stall)),
+
 	.ipacket(ie_mem_ipacket),
 	.alu_in(mem_alu_in),
 	.mem_data(mem_data_out),
@@ -245,10 +266,9 @@ WB write_back(
 	.br_addr(wbmem_addr),
 	.ipacket(mem_wb_ipacket),
 
-
 	.wbdata(wbdata),
-	.wbpc(wbpc),
 	.wbdr(wbdr),
+	.wbpc(wbpc),
 	.wbdrmux_sel(wb_drmux_sel),
 	.regfile_mux_sel(wb_regfile_mux_sel),
 	.load_regfile(wb_load_regfile)
@@ -263,19 +283,21 @@ hazard_detection hazard_detection_module
 	/* If signals */
 	.if_mem_resp(if_mem_resp),
 	.if_memread(if_memread),
+
+	/* EX signal */
+	.br_taken(br_taken),
+	
+	/* Ex Signals */
+	.alg_done(alg_done),
 	
 	/* Mem signals */
 	.mem_mem_resp(mem_mem_resp),
 	.mem_memread(mem_memread),
 	.mem_memwrite(mem_memwrite),	
 	
-	/* WB signal */
-	.br_taken(br_taken),
-	
 	/*Sti Ldi*/
 	.sti_ldi_sig(sti_ldi_sig),
 	
-
 	/*Packets for hazard detection*/
 	.exe_packet(id_ie_ipacket),
 	.mem_packet(ie_mem_ipacket),
@@ -332,6 +354,12 @@ BTB btb_module(
 	.taken_prediction(taken_prediction)
 );
 
+
+stallcounter16 bubble_counter(
+	.clk(clk),
+	.stall(pc_stall),
+	.bubble_count(bubble_count)
+);
 
 
 endmodule : pipeline_datapath

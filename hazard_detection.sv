@@ -6,6 +6,9 @@ module hazard_detection
 	input if_mem_resp,
 	input if_memread,
 	
+	/* Ex Signals */
+	input alg_done,
+	
 	/* Mem signals */
 	input mem_memread,
 	input mem_memwrite,
@@ -68,6 +71,15 @@ begin
 	end
 	/* Data Cache Miss */
 	if(mem_mem_resp == 1'b0 && (mem_memwrite || mem_memread))
+	begin
+		pc_stall = 1'b1;
+		if_id_stall = 1'b1;
+		id_ie_stall = 1'b1;
+		ie_mem_stall = 1'b1;
+		mem_wb_stall = 1'b1;
+	end
+	
+	if(alg_done == 1'b0)
 	begin
 		pc_stall = 1'b1;
 		if_id_stall = 1'b1;

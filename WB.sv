@@ -13,7 +13,7 @@ module WB(
 	output lc3b_word wbpc,
 	output lc3b_reg wbdr,
 	output logic wbdrmux_sel,
-//	output logic[1:0] pcmux_sel,
+	//output logic[1:0] pcmux_sel,
 	output lc3b_word wbdata,
 	output logic regfile_mux_sel,
 
@@ -21,8 +21,7 @@ module WB(
 	
 	//somthing new added here
 //	output logic br_sig,
-	
-//	output logic pip_flush
+	//output logic pip_flush
 );
 
 /* internal signals */
@@ -45,6 +44,7 @@ assign wbdrmux_sel = ipacket.drmux_sel;
 	.out(gen_out)
 );
 */
+
 mux4 #(.width(16)) cc_mux
 (
 	.sel(ipacket.cc_mux_sel),
@@ -54,6 +54,8 @@ mux4 #(.width(16)) cc_mux
 	.d(16'b0),
 	.f(wbdata)
 );
+
+
 /*
 register #(.width(3)) cc 
 (
@@ -85,5 +87,5 @@ pcmuxgen pcmuxselgen(
 	.wb_pc_mux_sel(pcmux_sel)
 );*/
 
-
+*/
 endmodule : WB

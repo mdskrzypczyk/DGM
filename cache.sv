@@ -48,9 +48,10 @@
 	output lc3b_word MEM_address,
 	output lc3b_burst MEM_wdata,
 	output logic MEM_read,
-	output logic MEM_write
+	output logic MEM_write,
 	
-
+	/* Miss Counter Signals */
+	output lc3b_word l1i_read_miss_count, l1i_write_miss_count, l1d_read_miss_count, l1d_write_miss_count
  );
  
  /* cache module from MP2 was used and modified here */
@@ -71,8 +72,10 @@
 	.pmem_rdata(l2i_rdata),
 	.pmem_wdata(IF_wdata),
 	.pmem_read(IF_read),
-	.pmem_write(IF_write)
- );
+	.pmem_write(IF_write),
+	.read_miss_count(l1i_read_miss_count),
+	.write_miss_count(l1i_write_miss_count)
+);
  
  /* the data cache */
   cache_module MEM_cache(
@@ -89,7 +92,9 @@
 	.pmem_rdata(l2d_rdata),
 	.pmem_wdata(MEM_wdata),
 	.pmem_read(MEM_read),
-	.pmem_write(MEM_write)
+	.pmem_write(MEM_write),
+	.read_miss_count(l1d_read_miss_count),
+	.write_miss_count(l1d_write_miss_count)
  );
  
  

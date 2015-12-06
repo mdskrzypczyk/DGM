@@ -59,8 +59,8 @@ begin
 		mem_out = mem_alu_data;
 	end
 	
-   op_rti  : begin 
-		mem_out = 16'hbbbb;
+   op_x  : begin 
+		mem_out = mem_alu_data;
 	end
 	
    op_shf  : begin
@@ -80,8 +80,6 @@ begin
 	end
 	
    op_trap : begin
-		/* Changed for TRAP Resolution */
-		//mem_out = mem_packet.pc;
 		mem_out = mem_rdata;
 	end
 	
@@ -133,7 +131,7 @@ begin
 		wb_out = wb_data;
 	end
 	
-   op_rti  : begin 
+   op_x  : begin 
 		wb_out = wb_data;
 	end
 	

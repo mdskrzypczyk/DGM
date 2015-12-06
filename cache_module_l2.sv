@@ -18,6 +18,7 @@ module cache_module_l2
 	//Signals to CPU
 	output mem_resp,
 	output lc3b_burst mem_rdata,
+	output lc3b_word read_miss_count, write_miss_count,
 	
 	//Signals to Memory
 	output pmem_read,
@@ -37,6 +38,17 @@ logic tag_hit;
 logic dirty;
 logic valid;
 logic pmem_addr_sel;
+logic pmem_read_sig;
+
+assign pmem_read = pmem_read_sig;
+
+misscounter16 miss_counter(
+	.read(mem_read),
+	.write(mem_write),
+	.pmem_read(pmem_read_sig),
+	.read_miss(read_miss_count),
+	.write_miss(write_miss_count)
+);
 
 cache_datapath_l2 CACHE_DATAPATH_l2
 (
@@ -61,7 +73,7 @@ cache_datapath_l2 CACHE_DATAPATH_l2
 	.pmem_wdata(pmem_wdata)
 );
 
-cache_control CACHE_CONTROLLER_l2
+cache_control_l2 CACHE_CONTROLLER_l2
 (
 	.clk(clk),
 	.mem_write(mem_write),
@@ -80,7 +92,7 @@ cache_control CACHE_CONTROLLER_l2
 	.load_lru(load_lru),
 	.pmem_addr_sel(pmem_addr_sel),
 	.pmem_write(pmem_write),
-	.pmem_read(pmem_read)
+	.pmem_read(pmem_read_sig)
 );
 
 endmodule : cache_module_l2

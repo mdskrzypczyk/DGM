@@ -31,15 +31,8 @@ end
 	
 /* Store data from MEM Stage */
 always_ff @(posedge clk)
-begin /*
-	if(flush)
-	begin
-		address = 16'h0;
-		memdata = 16'h0;
-		aludata = 16'h0;
-		packet = 1'b0;
-	end
-	else */if(~stall)  //case not stalling 
+begin 
+if(~stall)  //case not stalling 
 	begin 
 		address = br_address;
 		memdata = mem_data;

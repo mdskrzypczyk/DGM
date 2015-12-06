@@ -23,6 +23,7 @@ typedef logic  [4:0]  lc3b_set_l2; //total of 5 bits to cover 32 sets in l2 cach
 typedef logic  [2:0] lc3b_reg;
 typedef logic  [2:0] lc3b_nzp;
 typedef logic  [1:0] lc3b_mem_wmask;
+typedef logic  [11:0] lc3b_tag_vc; //addded for new expanded tag bits in fully associative victim cache
 
 typedef enum bit [3:0] {
     op_add  = 4'b0001,
@@ -35,7 +36,7 @@ typedef enum bit [3:0] {
     op_ldr  = 4'b0110,
     op_lea  = 4'b1110,
     op_not  = 4'b1001,
-    op_rti  = 4'b1000,
+    op_x  = 4'b1000,
     op_shf  = 4'b1101,
     op_stb  = 4'b0011,
     op_sti  = 4'b1011,
@@ -46,12 +47,31 @@ typedef enum bit [3:0] {
 typedef enum bit [3:0] {
     alu_pass,
     alu_add,
+	 alu_sub,
     alu_and,
     alu_not,
+	 alu_or,
+	 alu_xor,
+	 alu_mul,
+	 alu_div,
     alu_sll,
     alu_srl,
-    alu_sra
+    alu_sra,
+	 alu_nor,
+	 alu_nand,
+	 alu_xnor
 } lc3b_aluop;
+
+typedef enum bit[2:0] {
+	op_sub,
+	op_or,
+	op_xor,
+	op_mul,
+	op_hi_mul,
+	op_div,
+	op_rem,
+	op_count
+} lc3x_op;
 
 typedef struct packed {
 	/* Instruction */
@@ -85,9 +105,10 @@ typedef struct packed {
 	lc3b_aluop aluop;
 	logic [1:0] braddmux_sel;
 	logic alumux_sel;
-	logic ex_res;
-	logic res_sel;
-	logic mem_res;
+	logic [3:0] alu_res_sel;
+	logic load_alg_reg;
+	logic [2:0] op_x_bits;
+	logic [1:0] br_res_bits;
 	logic [1:0] pc_addr_sel;
 	
 	/* MEM */
